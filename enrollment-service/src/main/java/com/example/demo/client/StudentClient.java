@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.demo.dto.StudentDto;
-
-@FeignClient(name="student-service")
+@FeignClient(name="student-service", fallbackFactory = StudentClientFallbackFactory.class)
 public interface StudentClient {
 @GetMapping("/students/{id}")
 public StudentDto findStudentById(@PathVariable("id")int id);
