@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudentHub | Payment Management</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6fb;
+            color: #1f2937;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 28px 18px;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 35px;
+            letter-spacing: 0.5px;
+        }
+
+        .brand span {
+            color: #818cf8;
+        }
+
+        .nav-title {
+            font-size: 11px;
+            color: #9ca3af;
+            margin: 0 0 12px 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            display: block;
+            text-decoration: none;
+            color: #d1d5db;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 7px;
+            font-size: 14px;
+            transition: 0.25s;
+        }
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+            transform: translateX(3px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 245px;
+            padding: 28px 35px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .topbar h2 {
+            font-size: 25px;
+            color: #111827;
+        }
+
+        .service-badge {
+            background: white;
+            padding: 9px 16px;
+            border-radius: 25px;
+            font-size: 13px;
+            color: #4f46e5;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        /* HERO */
+
+        .hero {
+            background: linear-gradient(135deg, #4338ca, #6366f1, #8b5cf6);
+            border-radius: 18px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.22);
+        }
+
+        .hero h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #e0e7ff;
+            font-size: 14px;
+        }
+
+        /* STATS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-title {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 23px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        /* CONTENT */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 330px 1fr;
+            gap: 22px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 17px;
+            padding: 23px;
+            box-shadow: 0 5px 22px rgba(0, 0, 0, 0.06);
+        }
+
+        .panel h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #111827;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            outline: none;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            border: none;
+            padding: 12px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.25);
+        }
+
+        .btn-cancel {
+            margin-top: 8px;
+            background: #f3f4f6;
+            color: #374151;
+            display: none;
+        }
+
+        /* TABLE */
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .search-box {
+            width: 220px;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .search-box:focus {
+            border-color: #6366f1;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #6b7280;
+            font-size: 12px;
+            text-align: left;
+            padding: 13px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 13px;
+            border-top: 1px solid #eef0f4;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        tr:hover td {
+            background: #fafbff;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 7px 10px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 4px;
+        }
+
+        .edit-btn {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .status {
+            padding: 5px 9px;
+            border-radius: 15px;
+            background: #eef2ff;
+            color: #4f46e5;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* MESSAGE */
+
+        #message {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        @media(max-width: 1000px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 700px) {
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+                padding: 20px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <div class="brand">
+        Student<span>Hub</span>
+    </div>
+
+    <div class="nav-title">
+        Microservices
+    </div>
+
+    <!-- Dashboard -->
+
+    <a class="nav-link"
+       href="http://localhost:8081/students-ui">
+        🏠 Dashboard
+    </a>
+
+    <!-- Eureka Server -->
+
+    <a class="nav-link"
+       href="http://localhost:8761">
+        ⚙️ Eureka Server
+    </a>
+
+    <!-- Students -->
+
+    <a class="nav-link"
+       href="http://localhost:8081/students-ui">
+        👨‍🎓 Student Service
+    </a>
+
+    <!-- Courses -->
+
+    <a class="nav-link"
+       href="http://localhost:8082/courses-ui">
+        📚 Course Service
+    </a>
+
+    <!-- Instructors -->
+
+    <a class="nav-link"
+       href="http://localhost:8083/instructors-ui">
+        👨‍🏫 Instructor Service
+    </a>
+
+    <!-- Enrollment -->
+
+    <a class="nav-link"
+       href="http://localhost:8084/enrollments-ui">
+        📝 Enrollment Service
+    </a>
+
+    <!-- Payment -->
+
+    <a class="nav-link active"
+       href="http://localhost:8085/payments-ui">
+        💳 Payment Service
+    </a>
+
+    <!-- Assignment -->
+
+    <a class="nav-link"
+       href="http://localhost:8086/assignments-ui">
+        📋 Assignment Service
+    </a>
+
+    <!-- Result -->
+
+    <a class="nav-link"
+       href="http://localhost:8087/results-ui">
+        📊 Result Service
+    </a>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+    <div class="topbar">
+
+        <h2>
+            Payment Management
+        </h2>
+
+        <div class="service-badge">
+            Payment Service • 8085
+        </div>
+
+    </div>
+
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+        <h1>
+            Payment Management
+        </h1>
+
+        <p>
+            Manage student payments and enrollment transactions
+            through the Payment Service.
+        </p>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Total Payments
+            </div>
+
+            <div class="stat-value"
+                 id="totalPayments">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Service Status
+            </div>
+
+            <div class="stat-value">
+                ONLINE
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Service Port
+            </div>
+
+            <div class="stat-value">
+                8085
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Database
+            </div>
+
+            <div class="stat-value">
+                MySQL
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="content-grid">
+
+
+        <!-- FORM -->
+
+        <div class="panel">
+
+            <h3 id="formTitle">
+                Add Payment
+            </h3>
+
+            <input type="hidden"
+                   id="paymentId">
+
+
+            <div class="form-group">
+
+                <label>
+                    Student ID
+                </label>
+
+                <input type="number"
+                       id="studentId"
+                       placeholder="Enter Student ID"
+                       required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Enrollment ID
+                </label>
+
+                <input type="number"
+                       id="enrollmentId"
+                       placeholder="Enter Enrollment ID"
+                       required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Amount
+                </label>
+
+                <input type="number"
+                       id="amount"
+                       placeholder="Enter Amount"
+                       required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Status
+                </label>
+
+                <select id="status" required>
+
+                    <option value="">
+                        Select Status
+                    </option>
+
+                    <option value="PAID">
+                        PAID
+                    </option>
+
+                    <option value="PENDING">
+                        PENDING
+                    </option>
+
+                    <option value="FAILED">
+                        FAILED
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button class="btn btn-save"
+                    onclick="savePayment()"
+                    id="saveBtn">
+
+                Add Payment
+
+            </button>
+
+
+            <button class="btn btn-cancel"
+                    onclick="cancelEdit()"
+                    id="cancelBtn">
+
+                Cancel
+
+            </button>
+
+
+            <div id="message"></div>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="panel">
+
+            <div class="table-header">
+
+                <h3>
+                    Payment Records
+                </h3>
+
+                <input type="text"
+                       class="search-box"
+                       id="search"
+                       placeholder="Search payments..."
+                       onkeyup="searchPayments()">
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Student ID</th>
+                        <th>Enrollment ID</th>
+                        <th>Amount</th>
+                        <th>Payment Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody id="paymentTable">
+
+                    <tr th:each="payment : ${payments}">
+
+                        <td th:text="${payment.id}"></td>
+
+                        <td th:text="${payment.studentId}"></td>
+
+                        <td th:text="${payment.enrollmentId}"></td>
+
+                        <td th:text="${payment.amount}"></td>
+
+                        <td th:text="${payment.paymentDate}"></td>
+
+                        <td>
+
+                            <span class="status"
+                                  th:text="${payment.status}">
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <button class="action-btn edit-btn"
+                                    th:attr="
+                                    data-id=${payment.id},
+                                    data-student=${payment.studentId},
+                                    data-enrollment=${payment.enrollmentId},
+                                    data-amount=${payment.amount},
+                                    data-status=${payment.status}"
+                                    onclick="editPayment(this)">
+
+                                Edit
+
+                            </button>
+
+
+                            <button class="action-btn delete-btn"
+                                    th:attr="data-id=${payment.id}"
+                                    onclick="deletePayment(this)">
+
+                                Delete
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API_URL =
+    "http://localhost:8085/payments";
+
+let editing = false;
+
+
+/* LOAD COUNT */
+
+async function loadPayments() {
+
+    try {
+
+        const response =
+            await fetch(API_URL);
+
+        if (!response.ok) {
+            throw new Error("Failed");
+        }
+
+        const payments =
+            await response.json();
+
+        document.getElementById(
+            "totalPayments"
+        ).innerText =
+            payments.length;
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* SHOW MESSAGE */
+
+function showMessage(message, success = true) {
+
+    const msg =
+        document.getElementById("message");
+
+    msg.innerText = message;
+
+    msg.style.display = "block";
+
+    if (success) {
+
+        msg.style.color = "#166534";
+        msg.style.background = "#dcfce7";
+
+    } else {
+
+        msg.style.color = "#991b1b";
+        msg.style.background = "#fee2e2";
+
+    }
+
+    setTimeout(() => {
+
+        msg.style.display = "none";
+
+    }, 4000);
+
+}
+
+
+/* SAVE PAYMENT */
+
+async function savePayment() {
+
+    const id =
+        document.getElementById("paymentId").value;
+
+    const studentId =
+        document.getElementById("studentId").value;
+
+    const enrollmentId =
+        document.getElementById("enrollmentId").value;
+
+    const amount =
+        document.getElementById("amount").value;
+
+    const status =
+        document.getElementById("status").value;
+
+
+    if (!studentId ||
+        !enrollmentId ||
+        !amount ||
+        !status) {
+
+        showMessage(
+            "Please fill all required fields.",
+            false
+        );
+
+        return;
+    }
+
+
+    /* UPDATE */
+
+    if (editing) {
+
+        const payment = {
+
+            id: parseInt(id),
+
+            studentId:
+                parseInt(studentId),
+
+            enrollmentId:
+                parseInt(enrollmentId),
+
+            amount:
+                parseInt(amount),
+
+            paymentDate:
+                new Date()
+                .toISOString()
+                .split("T")[0],
+
+            status:
+                status
+
+        };
+
+
+        try {
+
+            const response =
+                await fetch(API_URL, {
+
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(payment)
+
+                });
+
+
+            if (!response.ok) {
+
+                const message =
+                    await response.text();
+
+                showMessage(
+                    message ||
+                    "Payment update failed.",
+                    false
+                );
+
+                return;
+            }
+
+
+            showMessage(
+                "Payment updated successfully."
+            );
+
+
+            setTimeout(() => {
+
+                location.reload();
+
+            }, 700);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Unable to connect with Payment Service.",
+                false
+            );
+
+        }
+
+        return;
+    }
+
+
+    /* ADD */
+
+    try {
+
+        const payment = {
+
+            amount:
+                parseInt(amount),
+
+            status:
+                status
+
+        };
+
+
+        const url =
+            API_URL +
+            "?studentId=" +
+            encodeURIComponent(studentId) +
+            "&enrollmentId=" +
+            encodeURIComponent(enrollmentId);
+
+
+        const response =
+            await fetch(url, {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify(payment)
+
+            });
+
+
+        const result =
+            await response.text();
+
+
+        if (!response.ok) {
+
+            showMessage(
+                result ||
+                "Payment could not be added.",
+                false
+            );
+
+            return;
+        }
+
+
+        showMessage(
+            "Payment added successfully."
+        );
+
+
+        setTimeout(() => {
+
+            location.reload();
+
+        }, 700);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            "Unable to connect with Payment Service.",
+            false
+        );
+
+    }
+
+}
+
+
+/* EDIT */
+
+function editPayment(button) {
+
+    editing = true;
+
+    document.getElementById(
+        "formTitle"
+    ).innerText =
+        "Update Payment";
+
+    document.getElementById(
+        "saveBtn"
+    ).innerText =
+        "Update Payment";
+
+    document.getElementById(
+        "cancelBtn"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "paymentId"
+    ).value =
+        button.dataset.id;
+
+    document.getElementById(
+        "studentId"
+    ).value =
+        button.dataset.student;
+
+    document.getElementById(
+        "enrollmentId"
+    ).value =
+        button.dataset.enrollment;
+
+    document.getElementById(
+        "amount"
+    ).value =
+        button.dataset.amount;
+
+    document.getElementById(
+        "status"
+    ).value =
+        button.dataset.status;
+
+}
+
+
+/* CANCEL EDIT */
+
+function cancelEdit() {
+
+    editing = false;
+
+    document.getElementById(
+        "formTitle"
+    ).innerText =
+        "Add Payment";
+
+    document.getElementById(
+        "saveBtn"
+    ).innerText =
+        "Add Payment";
+
+    document.getElementById(
+        "cancelBtn"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "paymentId"
+    ).value = "";
+
+    document.getElementById(
+        "studentId"
+    ).value = "";
+
+    document.getElementById(
+        "enrollmentId"
+    ).value = "";
+
+    document.getElementById(
+        "amount"
+    ).value = "";
+
+    document.getElementById(
+        "status"
+    ).value = "";
+
+}
+
+
+/* DELETE */
+
+async function deletePayment(button) {
+
+    const id =
+        button.dataset.id;
+
+
+    if (!confirm(
+        "Are you sure you want to delete this payment?"
+    )) {
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL + "/" + id,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            const message =
+                await response.text();
+
+            showMessage(
+                message ||
+                "Payment deletion failed.",
+                false
+            );
+
+            return;
+        }
+
+
+        showMessage(
+            "Payment deleted successfully."
+        );
+
+
+        setTimeout(() => {
+
+            location.reload();
+
+        }, 700);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            "Unable to connect with Payment Service.",
+            false
+        );
+
+    }
+
+}
+
+
+/* SEARCH */
+
+function searchPayments() {
+
+    const value =
+        document.getElementById("search")
+        .value
+        .toLowerCase();
+
+
+    const rows =
+        document.querySelectorAll(
+            "#paymentTable tr"
+        );
+
+
+    rows.forEach(row => {
+
+        const text =
+            row.innerText.toLowerCase();
+
+        row.style.display =
+            text.includes(value)
+                ? ""
+                : "none";
+
+    });
+
+}
+
+
+/* INITIAL */
+
+loadPayments();
+
+</script>
+
+</body>
+</html>

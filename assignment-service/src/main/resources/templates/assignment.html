@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>StudentHub | Assignment Management</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+body{
+    background:#f4f6fb;
+    color:#1f2937;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:245px;
+    height:100vh;
+    background:#111827;
+    color:white;
+    padding:25px 18px;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:700;
+    margin-bottom:35px;
+    padding-left:12px;
+}
+
+.logo span{
+    color:#818cf8;
+}
+
+.nav-title{
+    font-size:11px;
+    color:#9ca3af;
+    letter-spacing:1px;
+    margin:0 12px 12px;
+    text-transform:uppercase;
+}
+
+.nav-link{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px 14px;
+    margin-bottom:7px;
+    border-radius:10px;
+    color:#d1d5db;
+    text-decoration:none;
+    font-size:14px;
+    transition:.2s;
+}
+
+.nav-link:hover{
+    background:#1f2937;
+    color:white;
+}
+
+.nav-link.active{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    box-shadow:0 7px 18px rgba(79,70,229,.25);
+}
+
+/* MAIN */
+
+.main{
+    margin-left:245px;
+    padding:28px 35px;
+}
+
+/* TOPBAR */
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.topbar h1{
+    font-size:25px;
+    color:#111827;
+}
+
+.service-badge{
+    background:white;
+    border:1px solid #e5e7eb;
+    padding:9px 15px;
+    border-radius:20px;
+    font-size:13px;
+    color:#4f46e5;
+    font-weight:600;
+}
+
+/* HERO */
+
+.hero{
+    background:linear-gradient(135deg,#4338ca,#6366f1,#7c3aed);
+    border-radius:18px;
+    padding:28px 30px;
+    color:white;
+    margin-bottom:25px;
+    box-shadow:0 12px 30px rgba(79,70,229,.18);
+}
+
+.hero h2{
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.hero p{
+    opacity:.9;
+    font-size:14px;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.stat-card{
+    background:white;
+    padding:21px;
+    border-radius:15px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 5px 18px rgba(0,0,0,.04);
+}
+
+.stat-label{
+    font-size:13px;
+    color:#6b7280;
+    margin-bottom:8px;
+}
+
+.stat-value{
+    font-size:22px;
+    font-weight:700;
+    color:#111827;
+}
+
+/* CONTENT */
+
+.content-grid{
+    display:grid;
+    grid-template-columns:330px 1fr;
+    gap:22px;
+}
+
+.panel{
+    background:white;
+    border-radius:16px;
+    border:1px solid #e5e7eb;
+    padding:22px;
+    box-shadow:0 5px 18px rgba(0,0,0,.04);
+}
+
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.panel-header h3{
+    font-size:18px;
+    color:#111827;
+}
+
+/* FORM */
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:7px;
+    color:#374151;
+}
+
+.form-group input,
+.form-group textarea{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid #d1d5db;
+    border-radius:9px;
+    outline:none;
+    font-size:14px;
+}
+
+.form-group textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus{
+    border-color:#6366f1;
+    box-shadow:0 0 0 3px rgba(99,102,241,.1);
+}
+
+.btn{
+    border:none;
+    border-radius:9px;
+    padding:11px 17px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.btn-primary{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    width:100%;
+}
+
+.btn-cancel{
+    background:#f3f4f6;
+    color:#374151;
+    width:100%;
+    margin-top:8px;
+    display:none;
+}
+
+/* STATUS MESSAGE */
+
+#message{
+    margin-top:12px;
+    padding:10px 12px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+    text-align:center;
+    display:none;
+}
+
+/* SEARCH */
+
+.search-box{
+    width:240px;
+    padding:10px 13px;
+    border:1px solid #d1d5db;
+    border-radius:9px;
+    outline:none;
+}
+
+/* TABLE */
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    text-align:left;
+    background:#f8fafc;
+    color:#6b7280;
+    font-size:12px;
+    padding:13px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+td{
+    padding:14px 13px;
+    font-size:13px;
+    border-bottom:1px solid #f0f1f3;
+    color:#374151;
+}
+
+tr:hover td{
+    background:#fafbff;
+}
+
+.action-btn{
+    border:none;
+    padding:7px 11px;
+    border-radius:7px;
+    font-size:12px;
+    cursor:pointer;
+    margin-right:5px;
+}
+
+.edit-btn{
+    background:#fff7ed;
+    color:#c2410c;
+}
+
+.delete-btn{
+    background:#fef2f2;
+    color:#dc2626;
+}
+
+.empty-message{
+    text-align:center;
+    padding:30px;
+    color:#9ca3af;
+    display:none;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .content-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        Student<span>Hub</span>
+    </div>
+
+    <div class="nav-title">
+        Microservices
+    </div>
+
+    <!-- Dashboard -->
+    <a href="http://localhost:8081/students-ui"
+       class="nav-link">
+        🏠 Dashboard
+    </a>
+
+    <!-- Eureka -->
+    <a href="http://localhost:8761"
+       class="nav-link">
+        ⚙️ Eureka Server
+    </a>
+
+    <!-- Students -->
+    <a href="http://localhost:8081/students-ui"
+       class="nav-link">
+        👨‍🎓 Student Service
+    </a>
+
+    <!-- Courses -->
+    <a href="http://localhost:8082/courses-ui"
+       class="nav-link">
+        📚 Course Service
+    </a>
+
+    <!-- Instructors -->
+    <a href="http://localhost:8083/instructors-ui"
+       class="nav-link">
+        👨‍🏫 Instructor Service
+    </a>
+
+    <!-- Enrollment -->
+    <a href="http://localhost:8084/enrollments-ui"
+       class="nav-link">
+        📝 Enrollment Service
+    </a>
+
+    <!-- Payment -->
+    <a href="http://localhost:8085/payments-ui"
+       class="nav-link">
+        💳 Payment Service
+    </a>
+
+    <!-- Assignment -->
+    <a href="http://localhost:8086/assignments-ui"
+       class="nav-link active">
+        📋 Assignment Service
+    </a>
+
+    <!-- Result -->
+    <a href="http://localhost:8087/results-ui"
+       class="nav-link">
+        📊 Result Service
+    </a>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+    <div class="topbar">
+
+        <h1>
+            Assignment Management
+        </h1>
+
+        <div class="service-badge">
+            Assignment Service • 8086
+        </div>
+
+    </div>
+
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+        <h2>
+            Assignment Management System
+        </h2>
+
+        <p>
+            Manage assignments with instructor and course validation.
+        </p>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Total Assignments
+            </div>
+
+            <div class="stat-value"
+                 id="totalAssignments">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Service Status
+            </div>
+
+            <div class="stat-value">
+                ● Online
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Service Port
+            </div>
+
+            <div class="stat-value">
+                8086
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Database
+            </div>
+
+            <div class="stat-value">
+                MySQL
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="content-grid">
+
+
+        <!-- FORM -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <h3 id="formTitle">
+                    Add Assignment
+                </h3>
+
+            </div>
+
+
+            <form id="assignmentForm">
+
+                <input type="hidden"
+                       id="assignmentId">
+
+
+                <!-- INSTRUCTOR ID -->
+
+                <div class="form-group">
+
+                    <label>
+                        Instructor ID
+                    </label>
+
+                    <input
+                        type="number"
+                        id="instructorId"
+                        placeholder="Enter Instructor ID"
+                        required>
+
+                </div>
+
+
+                <!-- COURSE ID -->
+
+                <div class="form-group">
+
+                    <label>
+                        Course ID
+                    </label>
+
+                    <input
+                        type="number"
+                        id="courseId"
+                        placeholder="Enter Course ID"
+                        required>
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Assignment Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        placeholder="Enter Assignment Title"
+                        required>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        placeholder="Enter Assignment Description"
+                        required></textarea>
+
+                </div>
+
+
+                <!-- DUE DATE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Due Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="dueDate">
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="saveBtn">
+
+                    Add Assignment
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn btn-cancel"
+                    id="cancelBtn"
+                    onclick="cancelEdit()">
+
+                    Cancel Edit
+
+                </button>
+
+
+                <!-- STATUS -->
+
+                <div id="message"></div>
+
+            </form>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <h3>
+                    Assignment Records
+                </h3>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="search-box"
+                    placeholder="Search assignments..."
+                    onkeyup="searchAssignments()">
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Instructor ID</th>
+                            <th>Course ID</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Due Date</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="assignmentTableBody">
+
+                        <tr th:each="assignment : ${assignments}">
+
+                            <td th:text="${assignment.id}">
+                            </td>
+
+                            <td th:text="${assignment.instructorId}">
+                            </td>
+
+                            <td th:text="${assignment.courseId}">
+                            </td>
+
+                            <td th:text="${assignment.title}">
+                            </td>
+
+                            <td th:text="${assignment.description}">
+                            </td>
+
+                            <td th:text="${assignment.dueDate}">
+                            </td>
+
+
+                            <td>
+
+                                <button
+                                    class="action-btn edit-btn"
+
+                                    th:attr="
+                                    data-id=${assignment.id},
+                                    data-instructor=${assignment.instructorId},
+                                    data-course=${assignment.courseId},
+                                    data-title=${assignment.title},
+                                    data-description=${assignment.description},
+                                    data-due=${assignment.dueDate}"
+
+                                    onclick="editAssignment(this)">
+
+                                    Edit
+
+                                </button>
+
+
+                                <button
+                                    class="action-btn delete-btn"
+
+                                    th:attr="
+                                    data-id=${assignment.id}"
+
+                                    onclick="
+                                    deleteAssignment(
+                                    this.getAttribute('data-id')
+                                    )">
+
+                                    Delete
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+
+                <div
+                    class="empty-message"
+                    id="emptyMessage">
+
+                    No assignments found.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* API */
+
+const API_URL =
+    "http://localhost:8086/assignments";
+
+
+/* ELEMENTS */
+
+const form =
+    document.getElementById("assignmentForm");
+
+const assignmentIdInput =
+    document.getElementById("assignmentId");
+
+const instructorIdInput =
+    document.getElementById("instructorId");
+
+const courseIdInput =
+    document.getElementById("courseId");
+
+const titleInput =
+    document.getElementById("title");
+
+const descriptionInput =
+    document.getElementById("description");
+
+const dueDateInput =
+    document.getElementById("dueDate");
+
+const saveBtn =
+    document.getElementById("saveBtn");
+
+const cancelBtn =
+    document.getElementById("cancelBtn");
+
+const formTitle =
+    document.getElementById("formTitle");
+
+
+/* STATUS MESSAGE */
+
+function showMessage(message, success = true){
+
+    const msg =
+        document.getElementById("message");
+
+    msg.innerText = message;
+
+    msg.style.display = "block";
+
+    if(success){
+
+        msg.style.color = "#166534";
+        msg.style.background = "#dcfce7";
+
+    }else{
+
+        msg.style.color = "#991b1b";
+        msg.style.background = "#fee2e2";
+
+    }
+
+    setTimeout(() => {
+
+        msg.style.display = "none";
+
+    },4000);
+
+}
+
+
+/* ADD / UPDATE */
+
+form.addEventListener(
+    "submit",
+    async function(event){
+
+    event.preventDefault();
+
+
+    const id =
+        assignmentIdInput.value;
+
+
+    /* =========================
+       UPDATE
+       ========================= */
+
+    if(id){
+
+        const assignment = {
+
+            id: parseInt(id),
+
+            instructorId:
+                parseInt(instructorIdInput.value),
+
+            courseId:
+                parseInt(courseIdInput.value),
+
+            title:
+                titleInput.value,
+
+            description:
+                descriptionInput.value,
+
+            dueDate:
+                dueDateInput.value || null
+
+        };
+
+
+        try{
+
+            const response =
+                await fetch(API_URL,{
+
+                    method:"PUT",
+
+                    headers:{
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify(assignment)
+
+                });
+
+
+            if(!response.ok){
+
+                const message =
+                    await response.text();
+
+                showMessage(
+                    message ||
+                    "Assignment update failed.",
+                    false
+                );
+
+                return;
+
+            }
+
+
+            showMessage(
+                "Assignment updated successfully.",
+                true
+            );
+
+
+            setTimeout(() => {
+
+                location.reload();
+
+            },700);
+
+
+        }catch(error){
+
+            console.error(error);
+
+            showMessage(
+                "Unable to connect with Assignment Service.",
+                false
+            );
+
+        }
+
+        return;
+
+    }
+
+
+    /* =========================
+       ADD
+       ========================= */
+
+    const instructorId =
+        parseInt(
+            instructorIdInput.value
+        );
+
+    const courseId =
+        parseInt(
+            courseIdInput.value
+        );
+
+
+    const assignment = {
+
+        title:
+            titleInput.value,
+
+        description:
+            descriptionInput.value
+
+    };
+
+
+    try{
+
+        /*
+         * Controller receives:
+         *
+         * instructorId
+         * courseId
+         *
+         * Controller first checks
+         * Instructor Service.
+         *
+         * Then checks Course Service.
+         *
+         * Only after both are found,
+         * assignment is saved.
+         */
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "?instructorId=" +
+                instructorId +
+                "&courseId=" +
+                courseId,
+
+                {
+
+                    method:"POST",
+
+                    headers:{
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify(assignment)
+
+                }
+
+            );
+
+
+        const message =
+            await response.text();
+
+
+        if(!response.ok){
+
+            showMessage(
+                message ||
+                "Assignment could not be added.",
+                false
+            );
+
+            return;
+
+        }
+
+
+        showMessage(
+            "Assignment added successfully.",
+            true
+        );
+
+
+        setTimeout(() => {
+
+            location.reload();
+
+        },700);
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Unable to connect with Assignment Service.",
+            false
+        );
+
+    }
+
+});
+
+
+/* EDIT */
+
+function editAssignment(button){
+
+    assignmentIdInput.value =
+        button.getAttribute("data-id");
+
+    instructorIdInput.value =
+        button.getAttribute("data-instructor");
+
+    courseIdInput.value =
+        button.getAttribute("data-course");
+
+    titleInput.value =
+        button.getAttribute("data-title");
+
+    descriptionInput.value =
+        button.getAttribute("data-description");
+
+    dueDateInput.value =
+        button.getAttribute("data-due") || "";
+
+
+    formTitle.innerText =
+        "Update Assignment";
+
+    saveBtn.innerText =
+        "Update Assignment";
+
+    cancelBtn.style.display =
+        "block";
+
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
+
+}
+
+
+/* CANCEL */
+
+function cancelEdit(){
+
+    form.reset();
+
+    assignmentIdInput.value = "";
+
+    formTitle.innerText =
+        "Add Assignment";
+
+    saveBtn.innerText =
+        "Add Assignment";
+
+    cancelBtn.style.display =
+        "none";
+
+}
+
+
+/* DELETE */
+
+async function deleteAssignment(id){
+
+    if(
+        !confirm(
+            "Are you sure you want to delete this assignment?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+
+                API_URL + "/" + id,
+
+                {
+
+                    method:"DELETE"
+
+                }
+
+            );
+
+
+        if(!response.ok){
+
+            const message =
+                await response.text();
+
+            showMessage(
+                message ||
+                "Delete failed.",
+                false
+            );
+
+            return;
+
+        }
+
+
+        showMessage(
+            "Assignment deleted successfully.",
+            true
+        );
+
+
+        setTimeout(() => {
+
+            location.reload();
+
+        },700);
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "Unable to connect with Assignment Service.",
+            false
+        );
+
+    }
+
+}
+
+
+/* SEARCH */
+
+function searchAssignments(){
+
+    const search =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+
+    const rows =
+        document.querySelectorAll(
+            "#assignmentTableBody tr"
+        );
+
+
+    let visibleRows = 0;
+
+
+    rows.forEach(row => {
+
+        const text =
+            row.innerText.toLowerCase();
+
+
+        if(text.includes(search)){
+
+            row.style.display = "";
+
+            visibleRows++;
+
+        }else{
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+
+    document.getElementById(
+        "emptyMessage"
+    ).style.display =
+
+        visibleRows === 0
+            ? "block"
+            : "none";
+
+}
+
+
+/* INITIAL COUNT */
+
+function updateTotal(){
+
+    const rows =
+        document.querySelectorAll(
+            "#assignmentTableBody tr"
+        );
+
+
+    document.getElementById(
+        "totalAssignments"
+    ).innerText =
+        rows.length;
+
+
+    document.getElementById(
+        "emptyMessage"
+    ).style.display =
+
+        rows.length === 0
+            ? "block"
+            : "none";
+
+}
+
+
+updateTotal();
+
+</script>
+
+</body>
+
+</html>

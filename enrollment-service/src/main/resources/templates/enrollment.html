@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>StudentHub | Enrollment Management</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6fb;
+            color: #1f2937;
+        }
+
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+
+            background: #111827;
+            color: white;
+
+            padding: 25px 18px;
+
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 700;
+
+            margin-bottom: 8px;
+            padding-left: 10px;
+        }
+
+        .logo span {
+            color: #818cf8;
+        }
+
+        .subtitle {
+            color: #9ca3af;
+            font-size: 12px;
+
+            padding-left: 10px;
+            margin-bottom: 30px;
+        }
+
+        .nav-title {
+            font-size: 11px;
+            color: #6b7280;
+
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+            padding: 0 10px;
+            margin-bottom: 10px;
+        }
+
+        .nav a {
+            display: block;
+
+            text-decoration: none;
+
+            color: #d1d5db;
+
+            padding: 12px 13px;
+
+            border-radius: 10px;
+
+            margin-bottom: 6px;
+
+            font-size: 14px;
+
+            transition: 0.3s;
+        }
+
+        .nav a:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav a.active {
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            color: white;
+
+            box-shadow:
+                0 8px 20px
+                rgba(79, 70, 229, 0.25);
+        }
+
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 245px;
+            padding: 28px 35px;
+        }
+
+
+        /* ================= TOPBAR ================= */
+
+        .topbar {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+        .topbar h1 {
+            font-size: 26px;
+            color: #111827;
+        }
+
+        .service-badge {
+            background: white;
+
+            padding: 9px 16px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            color: #4f46e5;
+
+            font-weight: 600;
+
+            box-shadow:
+                0 3px 12px
+                rgba(0, 0, 0, 0.07);
+        }
+
+
+        /* ================= HERO ================= */
+
+        .hero {
+            background:
+                linear-gradient(
+                    135deg,
+                    #4338ca,
+                    #7c3aed
+                );
+
+            color: white;
+
+            padding: 30px;
+
+            border-radius: 18px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 12px 30px
+                rgba(79, 70, 229, 0.22);
+        }
+
+        .hero h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #e0e7ff;
+            font-size: 14px;
+        }
+
+
+        /* ================= STATS ================= */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 5px 18px
+                rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-title {
+            font-size: 13px;
+
+            color: #6b7280;
+
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+
+            font-weight: 700;
+
+            color: #111827;
+        }
+
+
+        /* ================= CONTENT ================= */
+
+        .content-grid {
+            display: grid;
+
+            grid-template-columns: 330px 1fr;
+
+            gap: 25px;
+        }
+
+        .panel {
+            background: white;
+
+            border-radius: 17px;
+
+            padding: 23px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0, 0, 0, 0.06);
+        }
+
+        .panel h3 {
+            margin-bottom: 20px;
+
+            font-size: 18px;
+
+            color: #111827;
+        }
+
+
+        /* ================= FORM ================= */
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            margin-bottom: 7px;
+
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #6366f1;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(99, 102, 241, 0.1);
+        }
+
+
+        /* ================= BUTTON ================= */
+
+        .btn {
+            width: 100%;
+
+            border: none;
+
+            padding: 12px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 8px 18px
+                rgba(79, 70, 229, 0.25);
+        }
+
+        .btn-cancel {
+            background: #e5e7eb;
+
+            color: #374151;
+
+            margin-top: 9px;
+
+            display: none;
+        }
+
+
+        /* ================= STATUS MESSAGE ================= */
+
+        #message {
+
+            display: none;
+
+            margin-top: 14px;
+
+            padding: 11px 13px;
+
+            border-radius: 9px;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            text-align: center;
+
+            line-height: 1.4;
+        }
+
+
+        /* ================= TABLE ================= */
+
+        .table-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .search-box {
+            padding: 10px 13px;
+
+            width: 230px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 9px;
+
+            outline: none;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+
+            background: #f9fafb;
+
+            color: #6b7280;
+
+            font-size: 12px;
+
+            padding: 13px;
+
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 14px 13px;
+
+            border-bottom:
+                1px solid #eef0f4;
+
+            font-size: 13px;
+        }
+
+        tr:hover td {
+            background: #fafaff;
+        }
+
+        .status {
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            background: #eef2ff;
+
+            color: #4f46e5;
+        }
+
+        .actions button {
+            border: none;
+
+            padding: 7px 10px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+
+            margin-right: 4px;
+        }
+
+        .edit-btn {
+            background: #fef3c7;
+
+            color: #92400e;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+
+            color: #b91c1c;
+        }
+
+        .empty {
+            text-align: center;
+
+            padding: 35px;
+
+            color: #9ca3af;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        Student<span>Hub</span>
+
+    </div>
+
+
+    <div class="subtitle">
+
+        Educational Platform
+
+    </div>
+
+
+    <div class="nav-title">
+
+        Services
+
+    </div>
+
+
+    <div class="nav">
+
+
+        <a href="http://localhost:8081/students-ui">
+
+            Students
+
+        </a>
+
+
+        <a href="http://localhost:8082/courses-ui">
+
+            Courses
+
+        </a>
+
+
+        <a href="http://localhost:8083/instructors-ui">
+
+            Instructors
+
+        </a>
+
+
+        <a href="http://localhost:8084/enrollments-ui"
+           class="active">
+
+            Enrollments
+
+        </a>
+
+
+        <a href="http://localhost:8085/payments-ui">
+
+            Payments
+
+        </a>
+
+
+        <a href="http://localhost:8086/assignments-ui">
+
+            Assignments
+
+        </a>
+
+
+        <a href="http://localhost:8087/results-ui">
+
+            Results
+
+        </a>
+
+
+        <a href="http://localhost:8761">
+
+            Eureka Server
+
+        </a>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="main">
+
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+        <h1>
+            Enrollment Management
+        </h1>
+
+
+        <div class="service-badge">
+
+            Enrollment Service • 8084
+
+        </div>
+
+    </div>
+
+
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+        <h2>
+            Welcome to Enrollment Management
+        </h2>
+
+        <p>
+            Manage student course enrollments efficiently
+            from one place.
+        </p>
+
+    </div>
+
+
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Total Enrollments
+            </div>
+
+            <div class="stat-value"
+                 th:text="${#lists.size(enrollments)}">
+
+                0
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Service Status
+            </div>
+
+            <div class="stat-value">
+                Online
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Service Port
+            </div>
+
+            <div class="stat-value">
+                8084
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-title">
+                Database
+            </div>
+
+            <div class="stat-value">
+                MySQL
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================= CONTENT ================= -->
+
+    <div class="content-grid">
+
+
+        <!-- ================= FORM ================= -->
+
+        <div class="panel">
+
+
+            <h3 id="formTitle">
+
+                Add Enrollment
+
+            </h3>
+
+
+            <form id="enrollmentForm">
+
+
+                <input
+                    type="hidden"
+                    id="id">
+
+
+                <!-- STUDENT ID -->
+
+                <div class="form-group">
+
+                    <label>
+                        Student ID
+                    </label>
+
+                    <input
+                        type="number"
+                        id="studentId"
+                        placeholder="Enter student ID"
+                        required>
+
+                </div>
+
+
+                <!-- COURSE ID -->
+
+                <div class="form-group">
+
+                    <label>
+                        Course ID
+                    </label>
+
+                    <input
+                        type="number"
+                        id="courseId"
+                        placeholder="Enter course ID"
+                        required>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="form-group">
+
+                    <label>
+                        Enrollment Status
+                    </label>
+
+                    <select
+                        id="status"
+                        required>
+
+                        <option value="">
+                            Select Status
+                        </option>
+
+                        <option value="ACTIVE">
+                            ACTIVE
+                        </option>
+
+                        <option value="COMPLETED">
+                            COMPLETED
+                        </option>
+
+                        <option value="CANCELLED">
+                            CANCELLED
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SAVE -->
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="saveBtn">
+
+                    Add Enrollment
+
+                </button>
+
+
+                <!-- CANCEL -->
+
+                <button
+                    type="button"
+                    class="btn btn-cancel"
+                    id="cancelBtn"
+                    onclick="cancelEdit()">
+
+                    Cancel
+
+                </button>
+
+
+                <!-- STATUS MESSAGE -->
+
+                <div id="message"></div>
+
+
+            </form>
+
+        </div>
+
+
+
+        <!-- ================= TABLE ================= -->
+
+        <div class="panel">
+
+
+            <div class="table-header">
+
+                <h3>
+                    Enrollment Records
+                </h3>
+
+
+                <input
+                    type="text"
+                    class="search-box"
+                    id="searchInput"
+                    placeholder="Search enrollment...">
+
+            </div>
+
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Student ID</th>
+
+                        <th>Course ID</th>
+
+                        <th>Enrollment Date</th>
+
+                        <th>Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody id="enrollmentTable">
+
+
+                    <tr
+                        th:each="enrollment : ${enrollments}">
+
+
+                        <td
+                            th:text="${enrollment.id}">
+
+                            1
+
+                        </td>
+
+
+                        <td
+                            th:text="${enrollment.studentid}">
+
+                            1
+
+                        </td>
+
+
+                        <td
+                            th:text="${enrollment.courseid}">
+
+                            1
+
+                        </td>
+
+
+                        <td
+                            th:text="${enrollment.enrollmentDate}">
+
+                            2026-09-18
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="status"
+                                th:text="${enrollment.status}">
+
+                                ACTIVE
+
+                            </span>
+
+                        </td>
+
+
+                        <td class="actions">
+
+
+                            <button
+                                class="edit-btn"
+
+                                th:attr="
+                                onclick=|editEnrollment(
+                                '${enrollment.id}',
+                                '${enrollment.studentid}',
+                                '${enrollment.courseid}',
+                                '${enrollment.status}'
+                                )|">
+
+                                Edit
+
+                            </button>
+
+
+                            <button
+                                class="delete-btn"
+
+                                th:attr="
+                                onclick=|deleteEnrollment(
+                                '${enrollment.id}'
+                                )|">
+
+                                Delete
+
+                            </button>
+
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr
+                        th:if="${#lists.isEmpty(enrollments)}">
+
+                        <td
+                            colspan="6"
+                            class="empty">
+
+                            No enrollment records found.
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+
+const API_URL =
+    "http://localhost:8084/enrollments";
+
+
+const form =
+    document.getElementById(
+        "enrollmentForm"
+    );
+
+
+const idInput =
+    document.getElementById("id");
+
+
+const studentIdInput =
+    document.getElementById("studentId");
+
+
+const courseIdInput =
+    document.getElementById("courseId");
+
+
+const statusInput =
+    document.getElementById("status");
+
+
+const saveBtn =
+    document.getElementById("saveBtn");
+
+
+const cancelBtn =
+    document.getElementById("cancelBtn");
+
+
+const formTitle =
+    document.getElementById("formTitle");
+
+
+const searchInput =
+    document.getElementById("searchInput");
+
+
+/* ================= STATUS MESSAGE ================= */
+
+function showMessage(
+    message,
+    success = true
+) {
+
+    const messageBox =
+        document.getElementById(
+            "message"
+        );
+
+
+    messageBox.innerText =
+        message;
+
+
+    messageBox.style.display =
+        "block";
+
+
+    if (success) {
+
+        messageBox.style.color =
+            "#166534";
+
+        messageBox.style.background =
+            "#dcfce7";
+
+        messageBox.style.border =
+            "1px solid #bbf7d0";
+
+    }
+    else {
+
+        messageBox.style.color =
+            "#991b1b";
+
+        messageBox.style.background =
+            "#fee2e2";
+
+        messageBox.style.border =
+            "1px solid #fecaca";
+
+    }
+
+
+    setTimeout(() => {
+
+        messageBox.style.display =
+            "none";
+
+    }, 4000);
+
+}
+
+
+
+/* ================= ADD / UPDATE ================= */
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const id =
+            idInput.value;
+
+
+        const studentId =
+            parseInt(
+                studentIdInput.value
+            );
+
+
+        const courseId =
+            parseInt(
+                courseIdInput.value
+            );
+
+
+        const status =
+            statusInput.value;
+
+
+        try {
+
+
+            let response;
+
+
+            /* ================= UPDATE ================= */
+
+            if (id) {
+
+
+                const enrollment = {
+
+                    id: parseInt(id),
+
+                    studentid:
+                        studentId,
+
+                    courseid:
+                        courseId,
+
+                    enrollmentDate:
+                        new Date()
+                        .toISOString()
+                        .split("T")[0],
+
+                    status:
+                        status
+
+                };
+
+
+                response =
+                    await fetch(
+                        API_URL,
+                        {
+
+                            method: "PUT",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    enrollment
+                                )
+
+                        }
+                    );
+
+            }
+
+
+            /* ================= ADD ================= */
+
+            else {
+
+
+                const enrollment = {
+
+                    studentId:
+                        studentId,
+
+                    courseId:
+                        courseId,
+
+                    status:
+                        status
+
+                };
+
+
+                response =
+                    await fetch(
+
+                        `${API_URL}?courseId=${courseId}&studentId=${studentId}`,
+
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    enrollment
+                                )
+
+                        }
+
+                    );
+
+            }
+
+
+
+            /* ================= RESPONSE ================= */
+
+            if (!response.ok) {
+
+
+                const errorMessage =
+                    await response.text();
+
+
+                throw new Error(
+                    errorMessage
+                );
+
+            }
+
+
+
+            /* ================= SUCCESS ================= */
+
+            showMessage(
+
+                id
+                    ? "Enrollment updated successfully!"
+                    : "Enrollment added successfully!",
+
+                true
+
+            );
+
+
+            setTimeout(() => {
+
+                location.reload();
+
+            }, 700);
+
+
+        }
+
+
+        /* ================= ERROR ================= */
+
+        catch (error) {
+
+
+            console.error(error);
+
+
+            const errorMessage =
+                error.message || "";
+
+
+            if (
+                errorMessage
+                    .toLowerCase()
+                    .includes("student")
+            ) {
+
+
+                showMessage(
+
+                    "Student ID is invalid. Student not found.",
+
+                    false
+
+                );
+
+            }
+
+
+            else if (
+                errorMessage
+                    .toLowerCase()
+                    .includes("course")
+            ) {
+
+
+                showMessage(
+
+                    "Course ID is invalid. Course not found.",
+
+                    false
+
+                );
+
+            }
+
+
+            else {
+
+
+                showMessage(
+
+                    errorMessage ||
+                    "Something went wrong. Please check the backend.",
+
+                    false
+
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+
+/* ================= EDIT ================= */
+
+function editEnrollment(
+    id,
+    studentId,
+    courseId,
+    status
+) {
+
+
+    idInput.value =
+        id;
+
+
+    studentIdInput.value =
+        studentId;
+
+
+    courseIdInput.value =
+        courseId;
+
+
+    statusInput.value =
+        status;
+
+
+    formTitle.innerText =
+        "Update Enrollment";
+
+
+    saveBtn.innerText =
+        "Update Enrollment";
+
+
+    cancelBtn.style.display =
+        "block";
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+
+/* ================= CANCEL EDIT ================= */
+
+function cancelEdit() {
+
+
+    form.reset();
+
+
+    idInput.value =
+        "";
+
+
+    formTitle.innerText =
+        "Add Enrollment";
+
+
+    saveBtn.innerText =
+        "Add Enrollment";
+
+
+    cancelBtn.style.display =
+        "none";
+
+
+    document.getElementById(
+        "message"
+    ).style.display =
+        "none";
+
+}
+
+
+
+/* ================= DELETE ================= */
+
+async function deleteEnrollment(id) {
+
+
+    if (
+        !confirm(
+            "Are you sure you want to delete this enrollment?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+
+        const response =
+            await fetch(
+
+                `${API_URL}/${id}`,
+
+                {
+
+                    method: "DELETE"
+
+                }
+
+            );
+
+
+        if (!response.ok) {
+
+
+            const errorMessage =
+                await response.text();
+
+
+            throw new Error(
+                errorMessage ||
+                "Unable to delete enrollment."
+            );
+
+        }
+
+
+        showMessage(
+
+            "Enrollment deleted successfully!",
+
+            true
+
+        );
+
+
+        setTimeout(() => {
+
+            location.reload();
+
+        }, 700);
+
+
+    }
+
+
+    catch (error) {
+
+
+        console.error(error);
+
+
+        showMessage(
+
+            error.message ||
+            "Unable to delete enrollment.",
+
+            false
+
+        );
+
+    }
+
+}
+
+
+
+/* ================= SEARCH ================= */
+
+searchInput.addEventListener(
+
+    "keyup",
+
+    function() {
+
+
+        const searchValue =
+            this.value.toLowerCase();
+
+
+        const rows =
+            document.querySelectorAll(
+                "#enrollmentTable tr"
+            );
+
+
+        rows.forEach(function(row) {
+
+
+            const text =
+                row.innerText
+                    .toLowerCase();
+
+
+            if (
+                text.includes(
+                    searchValue
+                )
+            ) {
+
+                row.style.display =
+                    "";
+
+            }
+
+            else {
+
+                row.style.display =
+                    "none";
+
+            }
+
+        });
+
+    }
+
+);
+
+</script>
+
+
+</body>
+
+</html>
