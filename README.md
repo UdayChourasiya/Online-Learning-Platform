@@ -52,8 +52,8 @@ A distributed Online Learning Management System built with **Spring Boot microse
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/UdayChourasiya/Lms-Microservices.git
-   cd Lms-Microservices
+   git clone https://github.com/UdayChourasiya/Online-Learning-Platform.git
+   cd Online-Learning-Platform
    ```
 
 2. **Configure the database**
@@ -78,7 +78,7 @@ A distributed Online Learning Management System built with **Spring Boot microse
 ## Project Structure
 
 ```
-Lms-Microservices/
+Online-Learning-Platform/
 ├── eureka-server/
 ├── student-service/
 ├── course-service/
