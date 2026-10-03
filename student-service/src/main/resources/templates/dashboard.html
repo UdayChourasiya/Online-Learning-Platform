@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard &middot; Online Learning Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--stage:#0A1626;--bg:#F7F3EA;--card:#FFFDF8;--ink:#14243A;--mute:#7C8594;--line:#E6DCC4;--gold:#B8923F;--gold2:#E3C77A;--navy:#0F2340;--side:#0F2340;--sideink:#B5BFCC;--bad:#B5483F;--ok:#2F8F6B}
+*,*:before,*:after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:radial-gradient(circle at 20% 0%,#16345C,var(--stage) 60%);font-family:"Inter","Segoe UI",sans-serif;color:var(--ink);padding:16px;min-height:100%}
+.app{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;background:var(--bg);border-radius:20px;overflow:hidden;border:1px solid var(--gold);box-shadow:0 30px 60px rgba(0,0,0,.45),0 0 0 6px rgba(201,169,97,.12)}
+aside{background:linear-gradient(180deg,var(--side),#0A1830);padding:22px 14px;color:var(--sideink)}
+.logo{display:flex;align-items:center;gap:10px;margin:0 8px 22px}
+.mono{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--gold2);display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-weight:700;color:var(--gold2);box-shadow:inset 0 0 0 3px rgba(227,199,122,.15)}
+.logo b{font-family:"Cormorant Garamond",serif;font-size:16px;color:#fff;line-height:1.1}.logo span{display:block;font-size:11px;color:var(--gold2);letter-spacing:.06em}
+.nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--sideink);text-decoration:none;font-size:14px;font-weight:300;margin-bottom:3px;border:1px solid transparent}
+.nav a i{font-style:normal;width:20px;text-align:center}
+.nav a.on{color:var(--gold2);font-weight:600;background:rgba(227,199,122,.08);border-color:rgba(227,199,122,.35)}
+main{padding:22px 24px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.top h1{font-family:"Cormorant Garamond",serif;font-size:30px;margin:0;line-height:1}
+.top p{margin:4px 0 0;color:var(--mute);font-size:13px}
+.grow{flex:1}
+.port{display:flex;align-items:center;gap:8px;border:1px solid var(--gold);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;background:var(--card)}
+.port small{color:var(--mute);font-weight:400}.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(47,143,107,.2)}
+.dot.down{background:var(--bad);box-shadow:0 0 0 3px rgba(181,72,63,.2)}
+.gold{display:inline-flex;align-items:center;gap:6px;text-decoration:none;border:0;cursor:pointer;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#231A05;padding:9px 16px;border-radius:10px;font:inherit;font-size:13px;font-weight:600;box-shadow:0 4px 14px rgba(184,146,63,.35)}
+.gold:focus-visible,.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--card);border-radius:14px;padding:18px;border:1px solid var(--line);box-shadow:0 8px 24px rgba(15,35,64,.08)}
+.card h3{margin:0;font-family:"Cormorant Garamond",serif;font-size:20px}.card .sub{color:var(--mute);font-size:12px;margin:2px 0 12px}
+.big{font-family:"Cormorant Garamond",serif;font-size:52px;font-weight:700;line-height:1;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.big small{font-family:Inter,sans-serif;font-size:13px;color:var(--mute);-webkit-text-fill-color:var(--mute);margin-left:6px}
+.ep{display:flex;gap:8px;font-size:12px;margin:6px 0;align-items:center}
+.ep b{font-size:10px;padding:2px 6px;border-radius:4px;color:#fff;min-width:48px;text-align:center;letter-spacing:.03em}
+.get{background:#2F8F6B}.post{background:#2F6FB5}.put{background:#B9822C}.del{background:#B5483F}
+.two{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--gold);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--gold)}
+td{padding:11px 8px;border-bottom:1px solid var(--line)}
+.empty{color:var(--mute);text-align:center;padding:22px;font-size:13px}
+.live{color:var(--ok);font-weight:600}
+.off{color:var(--bad);font-weight:600}
+label{display:block;font-size:12px;color:var(--mute);margin:10px 0 4px}
+.search{display:flex;align-items:center;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:0 12px}
+.search:focus-within{outline:2px solid var(--gold);outline-offset:1px}
+.search input{border:0;background:none;color:var(--ink);padding:9px 0;outline:none;width:150px;font:inherit;font-size:14px}
+.btn{border:1px solid var(--gold);background:none;color:var(--gold);padding:4px 10px;border-radius:8px;font:inherit;font-size:12px;cursor:pointer}
+@media (max-width:800px){.app{grid-template-columns:1fr}.nav{display:flex;gap:4px;overflow-x:auto}.nav a{white-space:nowrap}.row,.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="logo"><div class="mono">EP</div><div><b>Online Learning Management System</b><span>Microservices</span></div></div>
+  <nav class="nav">
+    <a th:href="@{http://localhost:8081/dashboard}" class="on"><i>&#128202;</i>Dashboard</a>
+    <a th:href="@{http://localhost:8081/student}"><i>&#127891;</i>Student</a>
+    <a th:href="@{http://localhost:8082/course}"><i>&#128218;</i>Course</a>
+    <a th:href="@{http://localhost:8083/instructor}"><i>&#128100;</i>Instructor</a>
+    <a th:href="@{http://localhost:8084/enrollment}"><i>&#128221;</i>Enrollment</a>
+    <a th:href="@{http://localhost:8085/payment}"><i>&#128179;</i>Payment</a>
+    <a th:href="@{http://localhost:8086/assignments}"><i>&#128204;</i>Assignment</a>
+    <a th:href="@{http://localhost:8087/result}"><i>&#127941;</i>Result</a>
+  </nav>
+</aside>
+<main>
+  <div class="top">
+    <div><h1>Dashboard</h1><p>Online Learning Management System &middot; All services</p></div>
+    <div class="grow"></div>
+    <div class="port"><span class="dot" id="dot"></span><span>8 SERVICES</span> <small>eureka-server registry</small></div>
+    <a class="gold" href="http://localhost:8761" target="_blank" rel="noopener">&#128752;&#65039; Open Eureka &middot; 8761</a>
+  </div>
+
+  <div class="row">
+    <div class="card"><h3>Total services</h3><div class="sub">Registered on Eureka</div><div class="big">8</div></div>
+    <div class="card"><h3>Total records</h3><div class="sub">Across all schemas</div><div class="big" id="recs">0</div></div>
+    <div class="card"><h3>Registry</h3><div class="sub">Eureka server</div>
+      <div class="ep"><b class="get">GET</b>localhost:8761</div>
+      <div class="ep"><b class="post">PORT</b>8761</div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div><h3>All services</h3><div class="sub" style="margin-bottom:0">Open any service</div></div>
+        <div class="grow"></div>
+        <label class="search" style="margin:0"><input id="q" placeholder="Search services" aria-label="Search services"><span aria-hidden="true">&#128269;</span></label>
+      </div>
+      <div class="wrap" style="margin-top:10px">
+        <table>
+          <thead><tr><th>Service</th><th>Port</th><th>Base path</th><th>Records</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="empty" hidden>No services match your search.</div>
+    </div>
+
+    <div class="card">
+      <h3>Architecture</h3><div class="sub">Feign calls between services</div>
+      <div class="ep"><b class="get">ENROLL</b>&rarr; Student, Course</div>
+      <div class="ep"><b class="get">PAYMEN</b>&rarr; Student, Enrollment</div>
+      <div class="ep"><b class="get">ASSIGN</b>&rarr; Instructor, Course</div>
+      <div class="ep"><b class="get">RESULT</b>&rarr; Student, Assignment, Enrollment</div>
+      <div class="sub" style="margin-top:12px">All services share the springdb77 MySQL schema.</div>
+    </div>
+  </div>
+</main>
+</div>
+
+<script th:inline="none">
+const HOST=location.hostname||'localhost';
+// path = backend REST path, ui = page ka path
+const SERVICES=[
+  {k:'eureka',ic:'\uD83D\uDEF0\uFE0F',n:'Eureka Server',port:8761,path:'/eureka',ui:'http://'+HOST+':8761',eureka:true},
+  {k:'student',ic:'\uD83C\uDF93',n:'Student Service',port:8081,path:'/students',ui:'/student'},
+  {k:'course',ic:'\uD83D\uDCDA',n:'Course Service',port:8082,path:'/courses',ui:'/course'},
+  {k:'instructor',ic:'\uD83D\uDC64',n:'Instructor Service',port:8083,path:'/instructors',ui:'/instructor'},
+  {k:'enrollment',ic:'\uD83D\uDCDD',n:'Enrollment Service',port:8084,path:'/enrollments',ui:'/enrollment'},
+  {k:'payment',ic:'\uD83D\uDCB3',n:'Payment Service',port:8085,path:'/payments',ui:'/payment'},
+  {k:'assignment',ic:'\uD83D\uDCCC',n:'Assignment Service',port:8086,path:'/assignment',ui:'/assignments'},
+  {k:'result',ic:'\uD83C\uDFC5',n:'Result Service',port:8087,path:'/results',ui:'/result'}
+];
+const status={};
+const $=id=>document.getElementById(id);
+
+// Service online hai ya offline, ye check karta hai. Count mil jaye to Total records card mein use hota hai.
+async function probe(s){
+  const base='http://'+HOST+':'+s.port+s.path;
+  if(!s.eureka){
+    try{
+      const r=await fetch(base);
+      if(!r.ok)throw new Error('bad status');
+      const d=await r.json();
+      return {up:true,count:Array.isArray(d)?d.length:null};
+    }catch(e){}
+  }
+  try{
+    await fetch('http://'+HOST+':'+s.port+(s.eureka?'/':s.path),{mode:'no-cors'});
+    return {up:true,count:null};
+  }catch(e){return {up:false,count:null}}
+}
+
+// Records column: sirf Online / Offline
+function recordsCell(s){
+  const st=status[s.k];
+  if(!st)return '\u2026';
+  return st.up?'<span class="live">Online</span>':'<span class="off">Offline</span>';
+}
+
+function rows(){
+  const q=$('q').value.toLowerCase();
+  const l=SERVICES.filter(s=>(s.n+s.port+s.path).toLowerCase().includes(q));
+  $('rows').innerHTML=l.map(s=>
+    '<tr><td>'+s.ic+' '+s.n+'</td><td>'+s.port+'</td><td>'+s.path+'</td><td>'+recordsCell(s)+'</td>'+
+    '<td><button class="btn" data-o="'+s.k+'">Open</button></td></tr>').join('');
+  $('empty').hidden=l.length>0;
+}
+
+function totals(){
+  let sum=0,unknown=0,anyDown=false;
+  SERVICES.filter(s=>!s.eureka).forEach(s=>{
+    const st=status[s.k];
+    if(!st)return;
+    if(!st.up)anyDown=true;
+    if(st.count!==null)sum+=st.count;else unknown++;
+  });
+  if(status.eureka&&!status.eureka.up)anyDown=true;
+  $('recs').innerHTML=sum+(unknown?'<small>partial</small>':'');
+  $('dot').classList.toggle('down',anyDown);
+}
+
+document.addEventListener('click',e=>{
+  const k=e.target.dataset&&e.target.dataset.o;
+  if(!k)return;
+  const s=SERVICES.find(x=>x.k===k);
+  if(s.eureka){window.open(s.ui,'_blank','noopener');return}
+  window.location.href=s.ui.startsWith('/')?'http://'+HOST+':'+s.port+s.ui:s.ui;
+});
+$('q').oninput=rows;
+
+rows();
+SERVICES.forEach(async s=>{status[s.k]=await probe(s);rows();totals()});
+</script>
+</body>
+</html>

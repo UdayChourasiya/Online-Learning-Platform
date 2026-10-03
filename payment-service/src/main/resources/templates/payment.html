@@ -1,1227 +1,356 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>StudentHub | Payment Management</title>
-
-    <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", Arial, sans-serif;
-        }
-
-        body {
-            background: #f4f6fb;
-            color: #1f2937;
-        }
-
-        /* SIDEBAR */
-
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 245px;
-            height: 100vh;
-            background: #111827;
-            color: white;
-            padding: 28px 18px;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .brand {
-            font-size: 25px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 35px;
-            letter-spacing: 0.5px;
-        }
-
-        .brand span {
-            color: #818cf8;
-        }
-
-        .nav-title {
-            font-size: 11px;
-            color: #9ca3af;
-            margin: 0 0 12px 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-link {
-            display: block;
-            text-decoration: none;
-            color: #d1d5db;
-            padding: 12px 14px;
-            border-radius: 10px;
-            margin-bottom: 7px;
-            font-size: 14px;
-            transition: 0.25s;
-        }
-
-        .nav-link:hover {
-            background: #1f2937;
-            color: white;
-            transform: translateX(3px);
-        }
-
-        .nav-link.active {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
-        }
-
-        /* MAIN */
-
-        .main {
-            margin-left: 245px;
-            padding: 28px 35px;
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .topbar h2 {
-            font-size: 25px;
-            color: #111827;
-        }
-
-        .service-badge {
-            background: white;
-            padding: 9px 16px;
-            border-radius: 25px;
-            font-size: 13px;
-            color: #4f46e5;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-        }
-
-        /* HERO */
-
-        .hero {
-            background: linear-gradient(135deg, #4338ca, #6366f1, #8b5cf6);
-            border-radius: 18px;
-            padding: 30px;
-            color: white;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.22);
-        }
-
-        .hero h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .hero p {
-            color: #e0e7ff;
-            font-size: 14px;
-        }
-
-        /* STATS */
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
-        }
-
-        .stat-title {
-            color: #6b7280;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 23px;
-            font-weight: 700;
-            color: #111827;
-        }
-
-        /* CONTENT */
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: 330px 1fr;
-            gap: 22px;
-        }
-
-        .panel {
-            background: white;
-            border-radius: 17px;
-            padding: 23px;
-            box-shadow: 0 5px 22px rgba(0, 0, 0, 0.06);
-        }
-
-        .panel h3 {
-            margin-bottom: 20px;
-            font-size: 18px;
-            color: #111827;
-        }
-
-        /* FORM */
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 7px;
-            color: #374151;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 11px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 9px;
-            outline: none;
-            font-size: 13px;
-            transition: 0.2s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .btn {
-            width: 100%;
-            border: none;
-            padding: 12px;
-            border-radius: 9px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-
-        .btn-save {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-        }
-
-        .btn-save:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.25);
-        }
-
-        .btn-cancel {
-            margin-top: 8px;
-            background: #f3f4f6;
-            color: #374151;
-            display: none;
-        }
-
-        /* TABLE */
-
-        .table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-        }
-
-        .search-box {
-            width: 220px;
-            padding: 10px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 9px;
-            outline: none;
-            font-size: 13px;
-        }
-
-        .search-box:focus {
-            border-color: #6366f1;
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: #f8fafc;
-            color: #6b7280;
-            font-size: 12px;
-            text-align: left;
-            padding: 13px;
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 13px;
-            border-top: 1px solid #eef0f4;
-            font-size: 13px;
-            white-space: nowrap;
-        }
-
-        tr:hover td {
-            background: #fafbff;
-        }
-
-        .action-btn {
-            border: none;
-            padding: 7px 10px;
-            border-radius: 7px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-right: 4px;
-        }
-
-        .edit-btn {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .delete-btn {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
-
-        .status {
-            padding: 5px 9px;
-            border-radius: 15px;
-            background: #eef2ff;
-            color: #4f46e5;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        /* MESSAGE */
-
-        #message {
-            margin-top: 12px;
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-        }
-
-        @media(max-width: 1000px) {
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media(max-width: 700px) {
-
-            .sidebar {
-                width: 200px;
-            }
-
-            .main {
-                margin-left: 200px;
-                padding: 20px;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .topbar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-        }
-
-    </style>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Payment Service &middot; Online Learning Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--stage:#0A1626;--bg:#F7F3EA;--card:#FFFDF8;--ink:#14243A;--mute:#7C8594;--line:#E6DCC4;--gold:#B8923F;--gold2:#E3C77A;--navy:#0F2340;--side:#0F2340;--sideink:#B5BFCC;--bad:#B5483F;--ok:#2F8F6B}
+*,*:before,*:after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:radial-gradient(circle at 20% 0%,#16345C,var(--stage) 60%);font-family:"Inter","Segoe UI",sans-serif;color:var(--ink);padding:16px;min-height:100%}
+.app{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;background:var(--bg);border-radius:20px;overflow:hidden;border:1px solid var(--gold);box-shadow:0 30px 60px rgba(0,0,0,.45),0 0 0 6px rgba(201,169,97,.12)}
+aside{background:linear-gradient(180deg,var(--side),#0A1830);padding:22px 14px;color:var(--sideink)}
+.logo{display:flex;align-items:center;gap:10px;margin:0 8px 22px}
+.mono{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--gold2);display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-weight:700;color:var(--gold2);box-shadow:inset 0 0 0 3px rgba(227,199,122,.15)}
+.logo b{font-family:"Cormorant Garamond",serif;font-size:16px;color:#fff;line-height:1.1}.logo span{display:block;font-size:11px;color:var(--gold2);letter-spacing:.06em}
+.nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--sideink);text-decoration:none;font-size:14px;font-weight:300;margin-bottom:3px;border:1px solid transparent}
+.nav a i{font-style:normal;width:20px;text-align:center}
+.nav a.on{color:var(--gold2);font-weight:600;background:rgba(227,199,122,.08);border-color:rgba(227,199,122,.35)}
+main{padding:22px 24px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.top h1{font-family:"Cormorant Garamond",serif;font-size:30px;margin:0;line-height:1}
+.top p{margin:4px 0 0;color:var(--mute);font-size:13px}
+.grow{flex:1}
+.port{display:flex;align-items:center;gap:8px;border:1px solid var(--gold);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;background:var(--card)}
+.port small{color:var(--mute);font-weight:400}.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(47,143,107,.2)}
+.dot.down{background:var(--bad);box-shadow:0 0 0 3px rgba(181,72,63,.2)}
+.gold{display:inline-flex;align-items:center;gap:6px;text-decoration:none;border:0;cursor:pointer;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#231A05;padding:9px 16px;border-radius:10px;font:inherit;font-size:13px;font-weight:600;box-shadow:0 4px 14px rgba(184,146,63,.35)}
+.gold:focus-visible,.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--card);border-radius:14px;padding:18px;border:1px solid var(--line);box-shadow:0 8px 24px rgba(15,35,64,.08)}
+.card h3{margin:0;font-family:"Cormorant Garamond",serif;font-size:20px}.card .sub{color:var(--mute);font-size:12px;margin:2px 0 12px}
+.big{font-family:"Cormorant Garamond",serif;font-size:52px;font-weight:700;line-height:1;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.big small{font-family:Inter,sans-serif;font-size:13px;color:var(--mute);-webkit-text-fill-color:var(--mute);margin-left:6px}
+.ep{display:flex;gap:8px;font-size:12px;margin:6px 0;align-items:center}
+.ep b{font-size:10px;padding:2px 6px;border-radius:4px;color:#fff;min-width:48px;text-align:center;letter-spacing:.03em}
+.get{background:#2F8F6B}.post{background:#2F6FB5}.put{background:#B9822C}.del{background:#B5483F}
+.two{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--gold);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--gold)}
+td{padding:11px 8px;border-bottom:1px solid var(--line)}
+.dash{color:var(--mute)}
+.empty{color:var(--mute);text-align:center;padding:22px;font-size:13px}
+.empty.bad{color:var(--bad);font-weight:600}
+label{display:block;font-size:12px;color:var(--mute);margin:10px 0 4px}
+input.f{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px}
+input.f:focus,.search:focus-within{outline:2px solid var(--gold);outline-offset:1px}
+.search{display:flex;align-items:center;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:0 12px}
+.search input{border:0;background:none;color:var(--ink);padding:9px 0;outline:none;width:150px;font:inherit;font-size:14px}
+.err{color:var(--bad);font-size:12px;min-height:16px;margin-top:4px}
+.err.small{min-height:0}
+.err.ok{color:var(--ok)}
+.btn{border:1px solid var(--gold);background:none;color:var(--gold);padding:4px 10px;border-radius:8px;font:inherit;font-size:12px;cursor:pointer}
+.btn.red{border-color:var(--bad);color:var(--bad)}.btn.out{padding:9px 14px;font-size:13px}
+.btn.red.fill{background:var(--bad);color:#fff}
+.acts{display:flex;gap:8px;margin-top:12px}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--navy);color:var(--gold2);border:1px solid var(--gold);padding:9px 18px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+/* delete confirm (in-page, browser popup ki jagah) */
+.modal{position:fixed;inset:0;background:rgba(10,22,38,.55);display:grid;place-items:center;z-index:50;padding:16px}
+.modal[hidden]{display:none}
+.dlg{background:var(--card);border:1px solid var(--gold);border-radius:14px;padding:20px;width:min(360px,100%);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.dlg h3{margin:0;font-family:"Cormorant Garamond",serif;font-size:22px}
+.dlg .sub{color:var(--mute);font-size:13px;margin:6px 0 4px}
+@media (max-width:800px){.app{grid-template-columns:1fr}.nav{display:flex;gap:4px;overflow-x:auto}.nav a{white-space:nowrap}.row,.two{grid-template-columns:1fr}}
+</style>
 </head>
-
 <body>
+<div class="app">
+<aside>
+  <div class="logo"><div class="mono">EP</div><div><b>Online Learning Management System</b><span>Microservices</span></div></div>
+  <nav class="nav">
+    <a th:href="@{http://localhost:8081/dashboard}"><i>&#128202;</i>Dashboard</a>
+    <a th:href="@{http://localhost:8081/student}"><i>&#127891;</i>Student</a>
+    <a th:href="@{http://localhost:8082/course}"><i>&#128218;</i>Course</a>
+    <a th:href="@{http://localhost:8083/instructor}"><i>&#128100;</i>Instructor</a>
+    <a th:href="@{http://localhost:8084/enrollment}"><i>&#128221;</i>Enrollment</a>
+    <a th:href="@{http://localhost:8085/payment}" class="on"><i>&#128179;</i>Payment</a>
+    <a th:href="@{http://localhost:8086/assignments}"><i>&#128204;</i>Assignment</a>
+    <a th:href="@{http://localhost:8087/result}"><i>&#127941;</i>Result</a>
+  </nav>
+</aside>
+<main>
+  <div class="top">
+    <div><h1>Payment Service</h1><p>Online Learning Management System &middot; Payment records</p></div>
+    <div class="grow"></div>
+    <div class="port"><span class="dot" id="dot"></span><span>PORT 8085</span> <small>payment-service</small></div>
+    <a class="gold" href="http://localhost:8761" target="_blank" rel="noopener">&#128752;&#65039; Open Eureka &middot; 8761</a>
+  </div>
 
-<!-- SIDEBAR -->
+  <div class="row">
+    <div class="card"><h3>Total payments</h3><div class="sub">Records in springdb77</div><div class="big" id="total">0</div></div>
+    <div class="card"><h3>Latest ID</h3><div class="sub">Highest id saved</div><div class="big" id="latest">0<small>id</small></div></div>
+    <div class="card"><h3>Endpoints</h3><div class="sub">Base path /payments</div>
+      <div class="ep"><b class="post">POST</b>/payments?studentId&amp;enrollmentId</div>
+      <div class="ep"><b class="get">GET</b>/payments, /{id}</div>
+      <div class="ep"><b class="put">PUT</b>/payments</div>
+      <div class="ep"><b class="del">DELETE</b>/payments/{id}</div>
+    </div>
+  </div>
 
-<div class="sidebar">
-
-    <div class="brand">
-        Student<span>Hub</span>
+  <div class="two">
+    <!-- LEFT: table -->
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div><h3>All payments</h3><div class="sub" style="margin-bottom:0">GET /payments</div></div>
+        <div class="grow"></div>
+        <label class="search" style="margin:0"><input id="q" inputmode="numeric" placeholder="Search by ID" aria-label="Search payment by ID"><span aria-hidden="true">&#128269;</span></label>
+      </div>
+      <div class="wrap" style="margin-top:10px">
+        <table>
+          <thead><tr><th>ID</th><th>Student ID</th><th>Enrollment ID</th><th>Amount</th><th>Payment date</th><th>Status</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="empty" role="alert" hidden></div>
     </div>
 
-    <div class="nav-title">
-        Microservices
+    <!-- RIGHT: add / edit form -->
+    <div class="card">
+      <h3 id="ft">Add payment</h3><div class="sub" id="fs">POST /payments</div>
+      <!-- Payment ki apni ID sirf Edit mein dikhti hai (read-only). Student ID / Enrollment ID manually likhni hain. -->
+      <div id="idw" hidden><label for="f_id">ID</label><input class="f" id="f_id" type="text" disabled></div>
+      <label for="f_studentId">Student ID</label>
+      <input class="f" id="f_studentId" type="text" inputmode="numeric" placeholder="e.g. 1" autocomplete="off">
+      <div class="err small" id="err_s" role="alert"></div>
+      <label for="f_enrollmentId">Enrollment ID</label>
+      <input class="f" id="f_enrollmentId" type="text" inputmode="numeric" placeholder="e.g. 12" autocomplete="off">
+      <div class="err small" id="err_e" role="alert"></div>
+      <label for="f_amount">Amount</label><input class="f" id="f_amount" type="text" inputmode="numeric" placeholder="e.g. 45000">
+      <label for="f_status">Status</label><input class="f" id="f_status" type="text" placeholder="e.g. PAID">
+      <div class="err" id="err" role="alert"></div>
+      <div class="acts"><button class="gold" id="save">Save payment</button><button class="btn out" id="reset">Clear</button></div>
     </div>
-
-    <!-- Dashboard -->
-
-    <a class="nav-link"
-       href="http://localhost:8081/students-ui">
-        🏠 Dashboard
-    </a>
-
-    <!-- Eureka Server -->
-
-    <a class="nav-link"
-       href="http://localhost:8761">
-        ⚙️ Eureka Server
-    </a>
-
-    <!-- Students -->
-
-    <a class="nav-link"
-       href="http://localhost:8081/students-ui">
-        👨‍🎓 Student Service
-    </a>
-
-    <!-- Courses -->
-
-    <a class="nav-link"
-       href="http://localhost:8082/courses-ui">
-        📚 Course Service
-    </a>
-
-    <!-- Instructors -->
-
-    <a class="nav-link"
-       href="http://localhost:8083/instructors-ui">
-        👨‍🏫 Instructor Service
-    </a>
-
-    <!-- Enrollment -->
-
-    <a class="nav-link"
-       href="http://localhost:8084/enrollments-ui">
-        📝 Enrollment Service
-    </a>
-
-    <!-- Payment -->
-
-    <a class="nav-link active"
-       href="http://localhost:8085/payments-ui">
-        💳 Payment Service
-    </a>
-
-    <!-- Assignment -->
-
-    <a class="nav-link"
-       href="http://localhost:8086/assignments-ui">
-        📋 Assignment Service
-    </a>
-
-    <!-- Result -->
-
-    <a class="nav-link"
-       href="http://localhost:8087/results-ui">
-        📊 Result Service
-    </a>
-
+  </div>
+</main>
 </div>
 
-
-<!-- MAIN -->
-
-<div class="main">
-
-    <div class="topbar">
-
-        <h2>
-            Payment Management
-        </h2>
-
-        <div class="service-badge">
-            Payment Service • 8085
-        </div>
-
-    </div>
-
-
-    <!-- HERO -->
-
-    <div class="hero">
-
-        <h1>
-            Payment Management
-        </h1>
-
-        <p>
-            Manage student payments and enrollment transactions
-            through the Payment Service.
-        </p>
-
-    </div>
-
-
-    <!-- STATS -->
-
-    <div class="stats">
-
-        <div class="stat-card">
-
-            <div class="stat-title">
-                Total Payments
-            </div>
-
-            <div class="stat-value"
-                 id="totalPayments">
-                0
-            </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <div class="stat-title">
-                Service Status
-            </div>
-
-            <div class="stat-value">
-                ONLINE
-            </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <div class="stat-title">
-                Service Port
-            </div>
-
-            <div class="stat-value">
-                8085
-            </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <div class="stat-title">
-                Database
-            </div>
-
-            <div class="stat-value">
-                MySQL
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- CONTENT -->
-
-    <div class="content-grid">
-
-
-        <!-- FORM -->
-
-        <div class="panel">
-
-            <h3 id="formTitle">
-                Add Payment
-            </h3>
-
-            <input type="hidden"
-                   id="paymentId">
-
-
-            <div class="form-group">
-
-                <label>
-                    Student ID
-                </label>
-
-                <input type="number"
-                       id="studentId"
-                       placeholder="Enter Student ID"
-                       required>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Enrollment ID
-                </label>
-
-                <input type="number"
-                       id="enrollmentId"
-                       placeholder="Enter Enrollment ID"
-                       required>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Amount
-                </label>
-
-                <input type="number"
-                       id="amount"
-                       placeholder="Enter Amount"
-                       required>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Status
-                </label>
-
-                <select id="status" required>
-
-                    <option value="">
-                        Select Status
-                    </option>
-
-                    <option value="PAID">
-                        PAID
-                    </option>
-
-                    <option value="PENDING">
-                        PENDING
-                    </option>
-
-                    <option value="FAILED">
-                        FAILED
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <button class="btn btn-save"
-                    onclick="savePayment()"
-                    id="saveBtn">
-
-                Add Payment
-
-            </button>
-
-
-            <button class="btn btn-cancel"
-                    onclick="cancelEdit()"
-                    id="cancelBtn">
-
-                Cancel
-
-            </button>
-
-
-            <div id="message"></div>
-
-        </div>
-
-
-        <!-- TABLE -->
-
-        <div class="panel">
-
-            <div class="table-header">
-
-                <h3>
-                    Payment Records
-                </h3>
-
-                <input type="text"
-                       class="search-box"
-                       id="search"
-                       placeholder="Search payments..."
-                       onkeyup="searchPayments()">
-
-            </div>
-
-
-            <div class="table-container">
-
-                <table>
-
-                    <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-                        <th>Student ID</th>
-                        <th>Enrollment ID</th>
-                        <th>Amount</th>
-                        <th>Payment Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-
-                    </tr>
-
-                    </thead>
-
-
-                    <tbody id="paymentTable">
-
-                    <tr th:each="payment : ${payments}">
-
-                        <td th:text="${payment.id}"></td>
-
-                        <td th:text="${payment.studentId}"></td>
-
-                        <td th:text="${payment.enrollmentId}"></td>
-
-                        <td th:text="${payment.amount}"></td>
-
-                        <td th:text="${payment.paymentDate}"></td>
-
-                        <td>
-
-                            <span class="status"
-                                  th:text="${payment.status}">
-                            </span>
-
-                        </td>
-
-                        <td>
-
-                            <button class="action-btn edit-btn"
-                                    th:attr="
-                                    data-id=${payment.id},
-                                    data-student=${payment.studentId},
-                                    data-enrollment=${payment.enrollmentId},
-                                    data-amount=${payment.amount},
-                                    data-status=${payment.status}"
-                                    onclick="editPayment(this)">
-
-                                Edit
-
-                            </button>
-
-
-                            <button class="action-btn delete-btn"
-                                    th:attr="data-id=${payment.id}"
-                                    onclick="deletePayment(this)">
-
-                                Delete
-
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-
+<!-- Delete confirm -->
+<div class="modal" id="modal" hidden>
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="mt">
+    <h3 id="mt">Delete payment?</h3>
+    <div class="sub" id="mb"></div>
+    <div class="acts"><button class="btn red out fill" id="mdel">Delete</button><button class="btn out" id="mno">Cancel</button></div>
+  </div>
 </div>
 
+<div class="toast" id="toast"></div>
 
-<script>
+<script th:inline="javascript">
+// PaymentController: GET/POST/PUT /payments, GET/DELETE /payments/{id}
+const API=/*[[@{/payments}]]*/'/payments';
+const HOST=location.hostname||'localhost';
+// Add ke time ID check ke liye seedha Student (8081) aur Enrollment (8084) service se poochte hain
+const STUDENT_API='http://'+HOST+':8081/students';
+const ENROLL_API='http://'+HOST+':8084/enrollments';
+const MAX_INT=2147483647;     // backend mein id aur amount Java int hain
 
-const API_URL =
-    "http://localhost:8085/payments";
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const JSON_H={'Content-Type':'application/json'};
 
-let editing = false;
+// JSON key ka case/underscore ignore karke value padhta hai (studentId, studentid, student_id sab chalenge)
+const pick=(r,name)=>{
+  const k=Object.keys(r||{}).find(x=>x.toLowerCase().replace(/_/g,'')===name);
+  return k===undefined?undefined:r[k];
+};
+const studentOf=r=>pick(r,'studentid');
+const enrollOf=r=>pick(r,'enrollmentid');
+const has=v=>v!==undefined&&v!==null&&v!=='';
+const show0=v=>has(v)?esc(v):'<span class="dash">\u2014</span>';
+const isNum=v=>/^\d+$/.test(v)&&Number(v)<=MAX_INT;
 
+// kind: 's' = Student, 'e' = Enrollment
+const KIND={
+  s:{input:'f_studentId',err:'err_s',api:STUDENT_API,label:'Student',port:8081,name:r=>r.name},
+  e:{input:'f_enrollmentId',err:'err_e',api:ENROLL_API,label:'Enrollment',port:8084,name:r=>'ID '+r.id+(r.status?' \u00B7 '+r.status:'')}
+};
+const tok={s:0,e:0};
 
-/* LOAD COUNT */
+let all=[],view=[],editing=null,editRec=null,pending=null,note='',down=false,timer;
+const dtimer={s:null,e:null};
 
-async function loadPayments() {
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),1800)}
+function setDot(ok){down=!ok;$('dot').classList.toggle('down',!ok)}
 
-    try {
-
-        const response =
-            await fetch(API_URL);
-
-        if (!response.ok) {
-            throw new Error("Failed");
-        }
-
-        const payments =
-            await response.json();
-
-        document.getElementById(
-            "totalPayments"
-        ).innerText =
-            payments.length;
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
-
+async function loadAll(){
+  try{
+    const res=await fetch(API);
+    if(!res.ok)throw 0;
+    all=await res.json();setDot(true);
+  }catch(e){all=[];setDot(false)}
 }
 
-
-/* SHOW MESSAGE */
-
-function showMessage(message, success = true) {
-
-    const msg =
-        document.getElementById("message");
-
-    msg.innerText = message;
-
-    msg.style.display = "block";
-
-    if (success) {
-
-        msg.style.color = "#166534";
-        msg.style.background = "#dcfce7";
-
-    } else {
-
-        msg.style.color = "#991b1b";
-        msg.style.background = "#fee2e2";
-
-    }
-
-    setTimeout(() => {
-
-        msg.style.display = "none";
-
-    }, 4000);
-
+// Table: sirf ID dikhti hai. Value na ho to —
+function render(){
+  $('rows').innerHTML=view.map(r=>`<tr><td>${esc(r.id)}</td><td>${show0(studentOf(r))}</td><td>${show0(enrollOf(r))}</td><td>${esc(r.amount)}</td><td>${esc(r.paymentDate)}</td><td>${esc(r.status)}</td><td style="white-space:nowrap"><button class="btn" data-e="${r.id}">Edit</button> <button class="btn red" data-d="${r.id}">Delete</button></td></tr>`).join('');
+  $('total').textContent=all.length;
+  $('latest').innerHTML=(all.length?Math.max(...all.map(r=>r.id)):0)+'<small>id</small>';
+  const text=note||(view.length?'':'No payments yet. Add one using the form.');
+  const e=$('empty');e.textContent=text;e.className='empty'+(note?' bad':'');e.hidden=!text;
 }
 
-
-/* SAVE PAYMENT */
-
-async function savePayment() {
-
-    const id =
-        document.getElementById("paymentId").value;
-
-    const studentId =
-        document.getElementById("studentId").value;
-
-    const enrollmentId =
-        document.getElementById("enrollmentId").value;
-
-    const amount =
-        document.getElementById("amount").value;
-
-    const status =
-        document.getElementById("status").value;
-
-
-    if (!studentId ||
-        !enrollmentId ||
-        !amount ||
-        !status) {
-
-        showMessage(
-            "Please fill all required fields.",
-            false
-        );
-
-        return;
-    }
-
-
-    /* UPDATE */
-
-    if (editing) {
-
-        const payment = {
-
-            id: parseInt(id),
-
-            studentId:
-                parseInt(studentId),
-
-            enrollmentId:
-                parseInt(enrollmentId),
-
-            amount:
-                parseInt(amount),
-
-            paymentDate:
-                new Date()
-                .toISOString()
-                .split("T")[0],
-
-            status:
-                status
-
-        };
-
-
-        try {
-
-            const response =
-                await fetch(API_URL, {
-
-                    method: "PUT",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify(payment)
-
-                });
-
-
-            if (!response.ok) {
-
-                const message =
-                    await response.text();
-
-                showMessage(
-                    message ||
-                    "Payment update failed.",
-                    false
-                );
-
-                return;
-            }
-
-
-            showMessage(
-                "Payment updated successfully."
-            );
-
-
-            setTimeout(() => {
-
-                location.reload();
-
-            }, 700);
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            showMessage(
-                "Unable to connect with Payment Service.",
-                false
-            );
-
-        }
-
-        return;
-    }
-
-
-    /* ADD */
-
-    try {
-
-        const payment = {
-
-            amount:
-                parseInt(amount),
-
-            status:
-                status
-
-        };
-
-
-        const url =
-            API_URL +
-            "?studentId=" +
-            encodeURIComponent(studentId) +
-            "&enrollmentId=" +
-            encodeURIComponent(enrollmentId);
-
-
-        const response =
-            await fetch(url, {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body:
-                    JSON.stringify(payment)
-
-            });
-
-
-        const result =
-            await response.text();
-
-
-        if (!response.ok) {
-
-            showMessage(
-                result ||
-                "Payment could not be added.",
-                false
-            );
-
-            return;
-        }
-
-
-        showMessage(
-            "Payment added successfully."
-        );
-
-
-        setTimeout(() => {
-
-            location.reload();
-
-        }, 700);
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        showMessage(
-            "Unable to connect with Payment Service.",
-            false
-        );
-
-    }
-
+// ID search: sirf wahi ID dikhao, nahi mili to red message
+async function search(){
+  const v=$('q').value.trim();note='';
+  if(down){view=[];note='Could not reach Payment Service on port 8085.';render();return}
+  if(!v){view=all;render();return}
+  if(!/^\d+$/.test(v)){view=[];note='Enter a numeric ID to search.';render();return}
+  try{
+    const res=await fetch(API+'/'+v);
+    if($('q').value.trim()!==v)return;           // user ne aage type kar diya
+    const txt=res.ok?await res.text():'';
+    if(txt.trim()){view=[JSON.parse(txt)]}
+    else{view=[];note='Payment ID '+v+' not found'}
+  }catch(e){view=[];note='Could not reach Payment Service on port 8085.'}
+  render();
+}
+async function refresh(){await loadAll();await search()}
+
+// ---- Student ID / Enrollment ID check (sirf Add ke time) ----
+// Service se us ID ka record maangta hai. Mila to {ok:true,rec}, nahi mila to {ok:false,msg}
+async function lookup(kind,v){
+  const k=KIND[kind];
+  if(!isNum(v))return {ok:false,msg:'Enter a valid '+k.label+' ID (numbers only).'};
+  try{
+    const r=await fetch(k.api+'/'+v);
+    const t=r.ok?(await r.text()).trim():'';
+    if(!t)return {ok:false,msg:k.label+' ID '+v+' not found'};
+    return {ok:true,rec:JSON.parse(t)};
+  }catch(e){return {ok:false,msg:'Could not reach '+k.label+' Service (port '+k.port+').'}}
 }
 
+// Result ko field ke niche dikhata hai: mila to green naam, nahi mila to red message
+function show(kind,r){
+  const el=$(KIND[kind].err);
+  if(r.ok){el.textContent=KIND[kind].label+': '+(KIND[kind].name(r.rec)||'found');el.className='err small ok'}
+  else{el.textContent=r.msg;el.className='err small'}
+}
+function hideMsg(kind){const el=$(KIND[kind].err);el.textContent='';el.className='err small'}
 
-/* EDIT */
-
-function editPayment(button) {
-
-    editing = true;
-
-    document.getElementById(
-        "formTitle"
-    ).innerText =
-        "Update Payment";
-
-    document.getElementById(
-        "saveBtn"
-    ).innerText =
-        "Update Payment";
-
-    document.getElementById(
-        "cancelBtn"
-    ).style.display =
-        "block";
-
-
-    document.getElementById(
-        "paymentId"
-    ).value =
-        button.dataset.id;
-
-    document.getElementById(
-        "studentId"
-    ).value =
-        button.dataset.student;
-
-    document.getElementById(
-        "enrollmentId"
-    ).value =
-        button.dataset.enrollment;
-
-    document.getElementById(
-        "amount"
-    ).value =
-        button.dataset.amount;
-
-    document.getElementById(
-        "status"
-    ).value =
-        button.dataset.status;
-
+async function check(kind){
+  const v=$(KIND[kind].input).value.trim(),t=++tok[kind];
+  if(!v){hideMsg(kind);return null}
+  const r=await lookup(kind,v);
+  if(t!==tok[kind])return null;               // user ne aage type kar diya
+  show(kind,r);return r;
+}
+// Edit ke time type karne par koi check nahi. Add ke time hi check hota hai.
+function onType(kind){
+  clearTimeout(dtimer[kind]);
+  if(editing!==null){hideMsg(kind);return}
+  dtimer[kind]=setTimeout(()=>check(kind),400);
 }
 
-
-/* CANCEL EDIT */
-
-function cancelEdit() {
-
-    editing = false;
-
-    document.getElementById(
-        "formTitle"
-    ).innerText =
-        "Add Payment";
-
-    document.getElementById(
-        "saveBtn"
-    ).innerText =
-        "Add Payment";
-
-    document.getElementById(
-        "cancelBtn"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "paymentId"
-    ).value = "";
-
-    document.getElementById(
-        "studentId"
-    ).value = "";
-
-    document.getElementById(
-        "enrollmentId"
-    ).value = "";
-
-    document.getElementById(
-        "amount"
-    ).value = "";
-
-    document.getElementById(
-        "status"
-    ).value = "";
-
+function clearForm(){
+  editing=null;editRec=null;
+  ['f_id','f_studentId','f_enrollmentId','f_amount','f_status'].forEach(i=>$(i).value='');
+  tok.s++;tok.e++;hideMsg('s');hideMsg('e');
+  $('idw').hidden=true;
+  $('ft').textContent='Add payment';$('fs').textContent='POST /payments';
+  $('save').textContent='Save payment';$('err').textContent='';
 }
 
-
-/* DELETE */
-
-async function deletePayment(button) {
-
-    const id =
-        button.dataset.id;
-
-
-    if (!confirm(
-        "Are you sure you want to delete this payment?"
-    )) {
-
-        return;
+async function save(){
+  const bad=m=>{$('err').textContent=m};
+  const sid=$('f_studentId').value.trim(),eid=$('f_enrollmentId').value.trim();
+  const amt=$('f_amount').value.trim(),status=$('f_status').value.trim();
+  $('err').textContent='';
+  const isEdit=editing!==null;
+  if(!sid){hideMsg('s');return bad('Enter a Student ID.')}
+  if(!eid){hideMsg('e');return bad('Enter an Enrollment ID.')}
+  if(!/^\d+$/.test(amt)||Number(amt)>MAX_INT)return bad('Enter a valid Amount (numbers only, up to '+MAX_INT+').');
+  if(!status)return bad('Enter a valid Status.');
+  if(isEdit){
+    // Edit: ID exist karti hai ya nahi, ye check nahi hota. Bas number honi chahiye.
+    hideMsg('s');hideMsg('e');
+    if(!isNum(sid))return bad('Enter a valid Student ID (numbers only).');
+    if(!isNum(eid))return bad('Enter a valid Enrollment ID (numbers only).');
+  }else{
+    // Add: save se pehle dono ID dobara check
+    tok.s++;tok.e++;
+    const [rs,re]=await Promise.all([lookup('s',sid),lookup('e',eid)]);
+    show('s',rs);show('e',re);
+    if(!rs.ok||!re.ok)return;
+  }
+  try{
+    let res;
+    if(isEdit){
+      // Edit: Student ID aur Enrollment ID badal sakte hain. Payment date wahi rehti hai.
+      const o={id:editing,studentId:Number(sid),enrollmentId:Number(eid),amount:Number(amt),paymentDate:editRec?editRec.paymentDate:null,status};
+      res=await fetch(API,{method:'PUT',headers:JSON_H,body:JSON.stringify(o)});
+    }else{
+      // Add: ID aur date backend khud set karta hai
+      res=await fetch(API+'?studentId='+sid+'&enrollmentId='+eid,{method:'POST',headers:JSON_H,body:JSON.stringify({amount:Number(amt),status})});
     }
-
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL + "/" + id,
-                {
-                    method: "DELETE"
-                }
-            );
-
-
-        if (!response.ok) {
-
-            const message =
-                await response.text();
-
-            showMessage(
-                message ||
-                "Payment deletion failed.",
-                false
-            );
-
-            return;
-        }
-
-
-        showMessage(
-            "Payment deleted successfully."
-        );
-
-
-        setTimeout(() => {
-
-            location.reload();
-
-        }, 700);
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        showMessage(
-            "Unable to connect with Payment Service.",
-            false
-        );
-
+    if(!res.ok){
+      const t=(await res.text()).trim();
+      if(res.status===404&&t&&t[0]!=='{')return bad(t);       // backend ka message: "StudentId 5 Not Found"
+      return bad('Could not save the payment. Please try again.');
     }
-
+    toast(isEdit?'Payment updated':'Payment added');
+    clearForm();await refresh();
+  }catch(e){bad('Could not save the payment. Check that the service is running.')}
 }
 
-
-/* SEARCH */
-
-function searchPayments() {
-
-    const value =
-        document.getElementById("search")
-        .value
-        .toLowerCase();
-
-
-    const rows =
-        document.querySelectorAll(
-            "#paymentTable tr"
-        );
-
-
-    rows.forEach(row => {
-
-        const text =
-            row.innerText.toLowerCase();
-
-        row.style.display =
-            text.includes(value)
-                ? ""
-                : "none";
-
-    });
-
+// delete confirm (in-page)
+function openDel(r){
+  pending=r;
+  const s=studentOf(r),e=enrollOf(r);
+  $('mb').textContent='ID '+r.id+' \u00B7 Student '+(has(s)?s:'\u2014')+' / Enrollment '+(has(e)?e:'\u2014')+' will be removed permanently.';
+  $('modal').hidden=false;$('mno').focus();
+}
+function closeDel(){$('modal').hidden=true;pending=null}
+async function doDelete(){
+  const r=pending;if(!r)return;closeDel();
+  try{
+    const res=await fetch(API+'/'+r.id,{method:'DELETE'});
+    await refresh();
+    if(res.ok){toast('Payment deleted');if(editing==r.id)clearForm()}
+    else{note=res.status===404?'Payment ID '+r.id+' not found':'Could not delete Payment ID '+r.id+'. Please try again.';render()}
+  }catch(e){note='Could not reach Payment Service on port 8085.';render()}
 }
 
-
-/* INITIAL */
-
-loadPayments();
-
+document.addEventListener('click',e=>{
+  const t=e.target;
+  if(t.dataset.e){
+    const r=view.find(q=>q.id==t.dataset.e);if(!r)return;
+    editing=r.id;editRec=r;
+    $('idw').hidden=false;$('f_id').value=r.id;
+    const s=studentOf(r),en=enrollOf(r);
+    $('f_studentId').value=has(s)?s:'';
+    $('f_enrollmentId').value=has(en)?en:'';
+    $('f_amount').value=r.amount??'';
+    $('f_status').value=r.status??'';
+    $('ft').textContent='Edit payment';$('fs').textContent='PUT /payments';
+    $('save').textContent='Update payment';$('err').textContent='';
+    tok.s++;tok.e++;hideMsg('s');hideMsg('e');   // Edit mein ID check nahi hota
+    $('f_studentId').focus();
+  }
+  if(t.dataset.d){const r=view.find(q=>q.id==t.dataset.d);if(r)openDel(r)}
+  if(t===$('modal'))closeDel();
+});
+$('f_studentId').addEventListener('input',()=>onType('s'));
+$('f_enrollmentId').addEventListener('input',()=>onType('e'));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modal').hidden)closeDel()});
+$('mno').onclick=closeDel;$('mdel').onclick=doDelete;
+$('save').onclick=save;$('reset').onclick=clearForm;
+$('q').oninput=()=>{clearTimeout(timer);timer=setTimeout(search,250)};
+refresh();
 </script>
-
 </body>
 </html>

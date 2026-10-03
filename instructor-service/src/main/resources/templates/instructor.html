@@ -1,1305 +1,259 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>StudentHub | Instructor Management</title>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", Arial, sans-serif;
-        }
-
-        body {
-            background: #f5f7fb;
-            color: #172033;
-        }
-
-        /* ================= SIDEBAR ================= */
-
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 245px;
-            height: 100vh;
-            background: #111827;
-            padding: 25px 16px;
-            box-shadow: 5px 0 25px rgba(0,0,0,0.08);
-            overflow-y: auto;
-        }
-
-        .brand {
-            padding: 5px 14px 30px;
-        }
-
-        .brand h2 {
-            color: white;
-            font-size: 24px;
-            letter-spacing: .5px;
-        }
-
-        .brand h2 span {
-            color: #6366f1;
-        }
-
-        .brand small {
-            display: block;
-            color: #7f8ba3;
-            margin-top: 6px;
-            font-size: 11px;
-            letter-spacing: 1.5px;
-        }
-
-        .menu-title {
-            color: #667085;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            padding: 0 14px 10px;
-            text-transform: uppercase;
-        }
-
-        .menu {
-            list-style: none;
-        }
-
-        .menu li {
-            margin: 5px 0;
-        }
-
-        .menu a {
-            display: flex;
-            align-items: center;
-            gap: 13px;
-            padding: 13px 14px;
-            color: #aeb7c8;
-            text-decoration: none;
-            border-radius: 9px;
-            transition: .25s;
-        }
-
-        .menu a:hover {
-            background: #1d2638;
-            color: white;
-        }
-
-        .menu a.active {
-            background: linear-gradient(
-                90deg,
-                #4f46e5,
-                #6366f1
-            );
-            color: white;
-            box-shadow: 0 8px 20px rgba(79,70,229,.25);
-        }
-
-        .menu-icon {
-            width: 22px;
-            text-align: center;
-            font-size: 16px;
-        }
-
-        /* ================= MAIN ================= */
-
-        .main {
-            margin-left: 245px;
-            min-height: 100vh;
-            padding: 28px 35px;
-        }
-
-        /* ================= TOPBAR ================= */
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .heading h1 {
-            font-size: 27px;
-            font-weight: 650;
-        }
-
-        .heading p {
-            color: #7b8495;
-            margin-top: 5px;
-            font-size: 13px;
-        }
-
-        .service {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            padding: 10px 16px;
-            background: white;
-            border: 1px solid #e7eaf0;
-            border-radius: 9px;
-            font-size: 12px;
-            color: #667085;
-        }
-
-        .online {
-            width: 8px;
-            height: 8px;
-            background: #22c55e;
-            border-radius: 50%;
-            box-shadow: 0 0 0 4px #dcfce7;
-        }
-
-        /* ================= HERO ================= */
-
-        .hero {
-            position: relative;
-            overflow: hidden;
-            padding: 28px 30px;
-            border-radius: 18px;
-            background: linear-gradient(
-                110deg,
-                #312e81,
-                #4f46e5,
-                #6366f1
-            );
-            color: white;
-            margin-bottom: 25px;
-            box-shadow: 0 15px 35px rgba(79,70,229,.18);
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            width: 220px;
-            height: 220px;
-            right: -70px;
-            top: -90px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.08);
-        }
-
-        .hero h2 {
-            font-size: 22px;
-            margin-bottom: 8px;
-        }
-
-        .hero p {
-            color: #dfe2ff;
-            font-size: 13px;
-            max-width: 550px;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            margin-top: 17px;
-            padding: 7px 13px;
-            background: rgba(255,255,255,.13);
-            border: 1px solid rgba(255,255,255,.2);
-            border-radius: 20px;
-            font-size: 11px;
-        }
-
-        /* ================= STATS ================= */
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 21px;
-            border-radius: 14px;
-            border: 1px solid #e9edf3;
-            box-shadow: 0 7px 22px rgba(16,24,40,.05);
-            transition: .25s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 28px rgba(16,24,40,.09);
-        }
-
-        .stat-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-
-        .stat-title {
-            color: #7b8495;
-            font-size: 12px;
-        }
-
-        .stat-icon {
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 9px;
-            background: #eef2ff;
-            color: #4f46e5;
-            font-size: 14px;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: 650;
-        }
-
-        .stat-sub {
-            margin-top: 5px;
-            font-size: 11px;
-            color: #98a2b3;
-        }
-
-        /* ================= CONTENT ================= */
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: 330px 1fr;
-            gap: 22px;
-        }
-
-        .panel {
-            background: white;
-            border: 1px solid #e9edf3;
-            border-radius: 15px;
-            padding: 24px;
-            box-shadow: 0 7px 22px rgba(16,24,40,.05);
-        }
-
-        /* ================= FORM ================= */
-
-        .panel-heading {
-            margin-bottom: 22px;
-        }
-
-        .panel-heading h2 {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .panel-heading p {
-            color: #98a2b3;
-            font-size: 11px;
-            margin-top: 5px;
-        }
-
-        .input-group {
-            margin-bottom: 17px;
-        }
-
-        .input-group label {
-            display: block;
-            color: #475467;
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 7px;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 13px;
-            border: 1px solid #dfe3ea;
-            border-radius: 8px;
-            background: #fbfcfe;
-            color: #172033;
-            outline: none;
-            font-size: 13px;
-            transition: .2s;
-        }
-
-        input:focus {
-            border-color: #6366f1;
-            background: white;
-            box-shadow: 0 0 0 3px #eef2ff;
-        }
-
-        .form-buttons {
-            display: flex;
-            gap: 8px;
-            margin-top: 20px;
-        }
-
-        button {
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-            padding: 11px 17px;
-            font-size: 12px;
-            font-weight: 600;
-            transition: .2s;
-        }
-
-        .save-btn {
-            flex: 1;
-            color: white;
-            background: linear-gradient(
-                135deg,
-                #4f46e5,
-                #6366f1
-            );
-            box-shadow: 0 7px 16px rgba(79,70,229,.2);
-        }
-
-        .save-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        .cancel-btn {
-            background: #f1f3f7;
-            color: #667085;
-            display: none;
-        }
-
-        /* ================= MESSAGE ================= */
-
-        #message {
-            margin-top: 12px;
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            text-align: center;
-            display: none;
-        }
-
-        /* ================= TABLE ================= */
-
-        .records-panel {
-            min-width: 0;
-        }
-
-        .records-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .records-title h2 {
-            font-size: 18px;
-        }
-
-        .records-title p {
-            color: #98a2b3;
-            font-size: 11px;
-            margin-top: 5px;
-        }
-
-        .search {
-            width: 220px;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            padding: 13px 12px;
-            text-align: left;
-            background: #f8f9fc;
-            color: #667085;
-            font-size: 10px;
-            letter-spacing: .5px;
-            font-weight: 650;
-            border-bottom: 1px solid #e7eaf0;
-        }
-
-        td {
-            padding: 15px 12px;
-            border-bottom: 1px solid #edf0f4;
-            font-size: 12px;
-            color: #475467;
-        }
-
-        tr:hover td {
-            background: #fafbff;
-        }
-
-        .id {
-            color: #4f46e5;
-            font-weight: 700;
-        }
-
-        .instructor-name {
-            color: #172033;
-            font-weight: 600;
-        }
-
-        .email {
-            color: #667085;
-        }
-
-        .specialization {
-            display: inline-block;
-            padding: 5px 9px;
-            border-radius: 7px;
-            background: #eef2ff;
-            color: #4f46e5;
-            font-size: 10px;
-            font-weight: 650;
-        }
-
-        .edit {
-            padding: 7px 11px;
-            background: #fff7e6;
-            color: #b7791f;
-            border: 1px solid #f5dfad;
-        }
-
-        .delete {
-            padding: 7px 11px;
-            background: #fff1f2;
-            color: #dc2626;
-            border: 1px solid #fecdd3;
-            margin-left: 4px;
-        }
-
-        /* ================= RESPONSIVE ================= */
-
-        @media(max-width:1100px) {
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media(max-width:750px) {
-
-            .sidebar {
-                width: 200px;
-            }
-
-            .main {
-                margin-left: 200px;
-                padding: 22px;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .topbar {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            .records-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            .search {
-                width: 100%;
-            }
-        }
-    </style>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Instructor Service &middot; Online Learning Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--stage:#0A1626;--bg:#F7F3EA;--card:#FFFDF8;--ink:#14243A;--mute:#7C8594;--line:#E6DCC4;--gold:#B8923F;--gold2:#E3C77A;--navy:#0F2340;--side:#0F2340;--sideink:#B5BFCC;--bad:#B5483F;--ok:#2F8F6B}
+*,*:before,*:after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:radial-gradient(circle at 20% 0%,#16345C,var(--stage) 60%);font-family:"Inter","Segoe UI",sans-serif;color:var(--ink);padding:16px;min-height:100%}
+.app{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;background:var(--bg);border-radius:20px;overflow:hidden;border:1px solid var(--gold);box-shadow:0 30px 60px rgba(0,0,0,.45),0 0 0 6px rgba(201,169,97,.12)}
+aside{background:linear-gradient(180deg,var(--side),#0A1830);padding:22px 14px;color:var(--sideink)}
+.logo{display:flex;align-items:center;gap:10px;margin:0 8px 22px}
+.mono{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--gold2);display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-weight:700;color:var(--gold2);box-shadow:inset 0 0 0 3px rgba(227,199,122,.15)}
+.logo b{font-family:"Cormorant Garamond",serif;font-size:16px;color:#fff;line-height:1.1}.logo span{display:block;font-size:11px;color:var(--gold2);letter-spacing:.06em}
+.nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--sideink);text-decoration:none;font-size:14px;font-weight:300;margin-bottom:3px;border:1px solid transparent}
+.nav a i{font-style:normal;width:20px;text-align:center}
+.nav a.on{color:var(--gold2);font-weight:600;background:rgba(227,199,122,.08);border-color:rgba(227,199,122,.35)}
+main{padding:22px 24px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.top h1{font-family:"Cormorant Garamond",serif;font-size:30px;margin:0;line-height:1}
+.top p{margin:4px 0 0;color:var(--mute);font-size:13px}
+.grow{flex:1}
+.port{display:flex;align-items:center;gap:8px;border:1px solid var(--gold);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;background:var(--card)}
+.port small{color:var(--mute);font-weight:400}.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(47,143,107,.2)}
+.dot.down{background:var(--bad);box-shadow:0 0 0 3px rgba(181,72,63,.2)}
+.gold{display:inline-flex;align-items:center;gap:6px;text-decoration:none;border:0;cursor:pointer;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#231A05;padding:9px 16px;border-radius:10px;font:inherit;font-size:13px;font-weight:600;box-shadow:0 4px 14px rgba(184,146,63,.35)}
+.gold:focus-visible,.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--card);border-radius:14px;padding:18px;border:1px solid var(--line);box-shadow:0 8px 24px rgba(15,35,64,.08)}
+.card h3{margin:0;font-family:"Cormorant Garamond",serif;font-size:20px}.card .sub{color:var(--mute);font-size:12px;margin:2px 0 12px}
+.big{font-family:"Cormorant Garamond",serif;font-size:52px;font-weight:700;line-height:1;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.big small{font-family:Inter,sans-serif;font-size:13px;color:var(--mute);-webkit-text-fill-color:var(--mute);margin-left:6px}
+.ep{display:flex;gap:8px;font-size:12px;margin:6px 0;align-items:center}
+.ep b{font-size:10px;padding:2px 6px;border-radius:4px;color:#fff;min-width:48px;text-align:center;letter-spacing:.03em}
+.get{background:#2F8F6B}.post{background:#2F6FB5}.put{background:#B9822C}.del{background:#B5483F}
+.two{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--gold);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--gold)}
+td{padding:11px 8px;border-bottom:1px solid var(--line)}
+.empty{color:var(--mute);text-align:center;padding:22px;font-size:13px}
+.empty.bad{color:var(--bad);font-weight:600}
+label{display:block;font-size:12px;color:var(--mute);margin:10px 0 4px}
+input.f{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px}
+input.f:focus,.search:focus-within{outline:2px solid var(--gold);outline-offset:1px}
+.search{display:flex;align-items:center;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:0 12px}
+.search input{border:0;background:none;color:var(--ink);padding:9px 0;outline:none;width:150px;font:inherit;font-size:14px}
+.err{color:var(--bad);font-size:12px;min-height:16px;margin-top:4px}
+.btn{border:1px solid var(--gold);background:none;color:var(--gold);padding:4px 10px;border-radius:8px;font:inherit;font-size:12px;cursor:pointer}
+.btn.red{border-color:var(--bad);color:var(--bad)}.btn.out{padding:9px 14px;font-size:13px}
+.btn.red.fill{background:var(--bad);color:#fff}
+.acts{display:flex;gap:8px;margin-top:12px}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--navy);color:var(--gold2);border:1px solid var(--gold);padding:9px 18px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+/* delete confirm (in-page, browser popup ki jagah) */
+.modal{position:fixed;inset:0;background:rgba(10,22,38,.55);display:grid;place-items:center;z-index:50;padding:16px}
+.modal[hidden]{display:none}
+.dlg{background:var(--card);border:1px solid var(--gold);border-radius:14px;padding:20px;width:min(360px,100%);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.dlg h3{margin:0;font-family:"Cormorant Garamond",serif;font-size:22px}
+.dlg .sub{color:var(--mute);font-size:13px;margin:6px 0 4px}
+@media (max-width:800px){.app{grid-template-columns:1fr}.nav{display:flex;gap:4px;overflow-x:auto}.nav a{white-space:nowrap}.row,.two{grid-template-columns:1fr}}
+</style>
 </head>
-
 <body>
+<div class="app">
+<aside>
+  <div class="logo"><div class="mono">EP</div><div><b>Online Learning Management System</b><span>Microservices</span></div></div>
+  <nav class="nav">
+    <a th:href="@{http://localhost:8081/dashboard}"><i>&#128202;</i>Dashboard</a>
+    <a th:href="@{http://localhost:8081/student}"><i>&#127891;</i>Student</a>
+    <a th:href="@{http://localhost:8082/course}"><i>&#128218;</i>Course</a>
+    <a th:href="@{http://localhost:8083/instructor}" class="on"><i>&#128100;</i>Instructor</a>
+    <a th:href="@{http://localhost:8084/enrollment}"><i>&#128221;</i>Enrollment</a>
+    <a th:href="@{http://localhost:8085/payment}"><i>&#128179;</i>Payment</a>
+    <a th:href="@{http://localhost:8086/assignments}"><i>&#128204;</i>Assignment</a>
+    <a th:href="@{http://localhost:8087/result}"><i>&#127941;</i>Result</a>
+  </nav>
+</aside>
+<main>
+  <div class="top">
+    <div><h1>Instructor Service</h1><p>Online Learning Management System &middot; Instructor records</p></div>
+    <div class="grow"></div>
+    <div class="port"><span class="dot" id="dot"></span><span>PORT 8083</span> <small>instructor-service</small></div>
+    <a class="gold" href="http://localhost:8761" target="_blank" rel="noopener">&#128752;&#65039; Open Eureka &middot; 8761</a>
+  </div>
 
-    <!-- ================= SIDEBAR ================= -->
+  <div class="row">
+    <div class="card"><h3>Total instructors</h3><div class="sub">Records in springdb77</div><div class="big" id="total">0</div></div>
+    <div class="card"><h3>Latest ID</h3><div class="sub">Highest id saved</div><div class="big" id="latest">0<small>id</small></div></div>
+    <div class="card"><h3>Endpoints</h3><div class="sub">Base path /instructors</div>
+      <div class="ep"><b class="post">POST</b>/instructors</div>
+      <div class="ep"><b class="get">GET</b>/instructors, /{id}</div>
+      <div class="ep"><b class="put">PUT</b>/instructors</div>
+      <div class="ep"><b class="del">DELETE</b>/instructors/{id}</div>
+    </div>
+  </div>
 
-    <div class="sidebar">
-
-        <div class="brand">
-            <h2>Student<span>Hub</span></h2>
-            <small>EDUCATION PLATFORM</small>
-        </div>
-
-        <div class="menu-title">
-            Navigation
-        </div>
-
-        <ul class="menu">
-
-            <!-- Dashboard -->
-            <li>
-                <a href="http://localhost:8081/students-ui">
-                    <span class="menu-icon">▣</span>
-                    Dashboard
-                </a>
-            </li>
-
-            <!-- Eureka Server -->
-            <li>
-                <a href="http://localhost:8761" target="_blank">
-                    <span class="menu-icon">◈</span>
-                    Eureka Server
-                </a>
-            </li>
-
-            <!-- Students -->
-            <li>
-                <a href="http://localhost:8081/students-ui">
-                    <span class="menu-icon">♙</span>
-                    Students
-                </a>
-            </li>
-
-            <!-- Courses -->
-            <li>
-                <a href="http://localhost:8082/courses-ui">
-                    <span class="menu-icon">▣</span>
-                    Courses
-                </a>
-            </li>
-
-            <!-- Instructors -->
-            <li>
-                <a href="http://localhost:8083/instructors-ui"
-                   class="active">
-                    <span class="menu-icon">◉</span>
-                    Instructors
-                </a>
-            </li>
-
-            <!-- Enrollment -->
-            <li>
-                <a href="http://localhost:8084/enrollments-ui">
-                    <span class="menu-icon">⇄</span>
-                    Enrollment
-                </a>
-            </li>
-
-            <!-- Payment -->
-            <li>
-                <a href="http://localhost:8085/payments-ui">
-                    <span class="menu-icon">₹</span>
-                    Payment
-                </a>
-            </li>
-
-            <!-- Assignment -->
-            <li>
-                <a href="http://localhost:8086/assignments-ui">
-                    <span class="menu-icon">✓</span>
-                    Assignment
-                </a>
-            </li>
-
-            <!-- Result -->
-            <li>
-                <a href="http://localhost:8087/results-ui">
-                    <span class="menu-icon">▤</span>
-                    Result
-                </a>
-            </li>
-
-        </ul>
-
+  <div class="two">
+    <!-- LEFT: table -->
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div><h3>All instructors</h3><div class="sub" style="margin-bottom:0">GET /instructors</div></div>
+        <div class="grow"></div>
+        <label class="search" style="margin:0"><input id="q" inputmode="numeric" placeholder="Search by ID" aria-label="Search instructor by ID"><span aria-hidden="true">&#128269;</span></label>
+      </div>
+      <div class="wrap" style="margin-top:10px">
+        <table>
+          <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Specialization</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="empty" role="alert" hidden></div>
     </div>
 
-
-    <!-- ================= MAIN ================= -->
-
-    <div class="main">
-
-        <!-- TOPBAR -->
-
-        <div class="topbar">
-
-            <div class="heading">
-
-                <h1>Instructor Management</h1>
-
-                <p>
-                    Manage and monitor all registered instructors.
-                </p>
-
-            </div>
-
-            <div class="service">
-
-                <span class="online"></span>
-
-                Instructor Service &nbsp;•&nbsp; 8083
-
-            </div>
-
-        </div>
-
-
-        <!-- ================= HERO ================= -->
-
-        <div class="hero">
-
-            <h2>Welcome to Instructor Management</h2>
-
-            <p>
-                Manage instructor information, specializations
-                and professional records from one place.
-            </p>
-
-            <span class="hero-badge">
-                Instructor Service • Spring Boot • MySQL
-            </span>
-
-        </div>
-
-
-        <!-- ================= STATS ================= -->
-
-        <div class="stats">
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <span class="stat-title">
-                        Total Instructors
-                    </span>
-
-                    <div class="stat-icon">
-                        ◉
-                    </div>
-
-                </div>
-
-                <div class="stat-value"
-                     th:text="${#lists.size(instructors)}">
-                    0
-                </div>
-
-                <div class="stat-sub">
-                    Registered instructors
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <span class="stat-title">
-                        Service Status
-                    </span>
-
-                    <div class="stat-icon">
-                        ✓
-                    </div>
-
-                </div>
-
-                <div class="stat-value">
-                    Online
-                </div>
-
-                <div class="stat-sub">
-                    Instructor Service
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <span class="stat-title">
-                        Service Port
-                    </span>
-
-                    <div class="stat-icon">
-                        83
-                    </div>
-
-                </div>
-
-                <div class="stat-value">
-                    8083
-                </div>
-
-                <div class="stat-sub">
-                    Spring Boot service
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <span class="stat-title">
-                        Database
-                    </span>
-
-                    <div class="stat-icon">
-                        DB
-                    </div>
-
-                </div>
-
-                <div class="stat-value">
-                    MySQL
-                </div>
-
-                <div class="stat-sub">
-                    Persistent storage
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ================= CONTENT ================= -->
-
-        <div class="content-grid">
-
-            <!-- ================= ADD INSTRUCTOR ================= -->
-
-            <div class="panel">
-
-                <div class="panel-heading">
-
-                    <h2 id="formTitle">
-                        Add New Instructor
-                    </h2>
-
-                    <p>
-                        Create a new instructor record
-                    </p>
-
-                </div>
-
-
-                <form onsubmit="saveInstructor(event)">
-
-                    <input type="hidden" id="id">
-
-
-                    <div class="input-group">
-
-                        <label>
-                            Instructor Name
-                        </label>
-
-                        <input
-                            type="text"
-                            id="name"
-                            placeholder="Enter instructor name"
-                            required>
-
-                    </div>
-
-
-                    <div class="input-group">
-
-                        <label>
-                            Email Address
-                        </label>
-
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="Enter email address"
-                            required>
-
-                    </div>
-
-
-                    <div class="input-group">
-
-                        <label>
-                            Specialization
-                        </label>
-
-                        <input
-                            type="text"
-                            id="specialization"
-                            placeholder="e.g. Java, AI, Database"
-                            required>
-
-                    </div>
-
-
-                    <div class="form-buttons">
-
-                        <button
-                            type="submit"
-                            class="save-btn"
-                            id="saveBtn">
-                            Add Instructor
-                        </button>
-
-                        <button
-                            type="button"
-                            class="cancel-btn"
-                            id="cancelBtn"
-                            onclick="cancelEdit()">
-                            Cancel
-                        </button>
-
-                    </div>
-
-
-                    <!-- STATUS / ERROR MESSAGE -->
-
-                    <div id="message"></div>
-
-                </form>
-
-            </div>
-
-
-            <!-- ================= RECORDS ================= -->
-
-            <div class="panel records-panel">
-
-                <div class="records-header">
-
-                    <div class="records-title">
-
-                        <h2>
-                            Instructor Records
-                        </h2>
-
-                        <p>
-                            View and manage instructor information
-                        </p>
-
-                    </div>
-
-
-                    <input
-                        type="text"
-                        class="search"
-                        id="search"
-                        placeholder="Search instructors..."
-                        onkeyup="searchInstructor()">
-
-                </div>
-
-
-                <div class="table-wrapper">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-                                <th>ID</th>
-                                <th>Instructor</th>
-                                <th>Email</th>
-                                <th>Specialization</th>
-                                <th>Action</th>
-                            </tr>
-
-                        </thead>
-
-
-                        <tbody id="instructorTable">
-
-                            <tr th:each="instructor : ${instructors}">
-
-                                <td
-                                    class="id"
-                                    th:text="${instructor.id}">
-                                    1
-                                </td>
-
-
-                                <td>
-
-                                    <span
-                                        class="instructor-name"
-                                        th:text="${instructor.name}">
-                                        Instructor Name
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span
-                                        class="email"
-                                        th:text="${instructor.email}">
-                                        email@example.com
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <span
-                                        class="specialization"
-                                        th:text="${instructor.specialization}">
-                                        Java
-                                    </span>
-
-                                </td>
-
-
-                                <td>
-
-                                    <button
-                                        class="edit"
-                                        type="button"
-                                        th:attr="onclick=|editInstructor('${instructor.id}','${instructor.name}','${instructor.email}','${instructor.specialization}')|">
-                                        Edit
-                                    </button>
-
-
-                                    <button
-                                        class="delete"
-                                        type="button"
-                                        th:attr="onclick=|deleteInstructor('${instructor.id}')|">
-                                        Delete
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-
-                            <tr th:if="${#lists.isEmpty(instructors)}">
-
-                                <td
-                                    colspan="5"
-                                    style="text-align:center;padding:35px;color:#98a2b3;">
-                                    No instructor records found
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </div>
-
+    <!-- RIGHT: add / edit form -->
+    <div class="card">
+      <h3 id="ft">Add instructor</h3><div class="sub" id="fs">POST /instructors</div>
+      <!-- ID sirf Edit mein dikhti hai (read-only) -->
+      <div id="idw" hidden><label for="f_id">ID</label><input class="f" id="f_id" type="text" disabled></div>
+      <label for="f_name">Name</label><input class="f" id="f_name" type="text">
+      <label for="f_email">Email</label><input class="f" id="f_email" type="email">
+      <label for="f_specialization">Specialization</label><input class="f" id="f_specialization" type="text" placeholder="e.g. Spring Boot">
+      <div class="err" id="err" role="alert"></div>
+      <div class="acts"><button class="gold" id="save">Save instructor</button><button class="btn out" id="reset">Clear</button></div>
     </div>
-
-
-    <!-- ================= JAVASCRIPT ================= -->
-
-    <script>
-
-        function showMessage(message, success = true) {
-
-            const msg =
-                document.getElementById("message");
-
-            msg.innerText = message;
-            msg.style.display = "block";
-
-            if (success) {
-
-                msg.style.color = "#166534";
-                msg.style.background = "#dcfce7";
-
-            } else {
-
-                msg.style.color = "#991b1b";
-                msg.style.background = "#fee2e2";
-
-            }
-
-            setTimeout(() => {
-
-                msg.style.display = "none";
-
-            }, 4000);
-        }
-
-
-        function saveInstructor(event) {
-
-            event.preventDefault();
-
-            const id =
-                document.getElementById("id").value;
-
-            const instructor = {
-
-                name:
-                    document.getElementById("name").value,
-
-                email:
-                    document.getElementById("email").value,
-
-                specialization:
-                    document.getElementById("specialization").value
-
-            };
-
-
-            let url = "/instructors";
-            let method = "POST";
-
-
-            if (id) {
-
-                instructor.id = parseInt(id);
-                method = "PUT";
-
-            }
-
-
-            fetch(url, {
-
-                method: method,
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify(instructor)
-
-            })
-
-            .then(response => {
-
-                if (!response.ok) {
-
-                    return response.text()
-                        .then(message => {
-
-                            throw new Error(
-                                message || "Request failed"
-                            );
-
-                        });
-
-                }
-
-                return response.text();
-
-            })
-
-            .then(() => {
-
-                showMessage(
-
-                    method === "POST"
-                        ? "Instructor added successfully"
-                        : "Instructor updated successfully",
-
-                    true
-
-                );
-
-                setTimeout(() => {
-
-                    location.reload();
-
-                }, 700);
-
-            })
-
-            .catch(error => {
-
-                console.error(error);
-
-                showMessage(
-
-                    error.message ||
-                    "Something went wrong",
-
-                    false
-
-                );
-
-            });
-
-        }
-
-
-        function editInstructor(
-            id,
-            name,
-            email,
-            specialization
-        ) {
-
-            document.getElementById("id").value = id;
-
-            document.getElementById("name").value = name;
-
-            document.getElementById("email").value = email;
-
-            document.getElementById("specialization").value =
-                specialization;
-
-
-            document.getElementById("formTitle").innerText =
-                "Update Instructor";
-
-
-            document.getElementById("saveBtn").innerText =
-                "Update Instructor";
-
-
-            document.getElementById("cancelBtn").style.display =
-                "block";
-
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        }
-
-
-        function cancelEdit() {
-
-            document.getElementById("id").value = "";
-
-            document.getElementById("name").value = "";
-
-            document.getElementById("email").value = "";
-
-            document.getElementById("specialization").value = "";
-
-
-            document.getElementById("formTitle").innerText =
-                "Add New Instructor";
-
-
-            document.getElementById("saveBtn").innerText =
-                "Add Instructor";
-
-
-            document.getElementById("cancelBtn").style.display =
-                "none";
-
-
-            document.getElementById("message").style.display =
-                "none";
-
-        }
-
-
-        function deleteInstructor(id) {
-
-            if (
-                !confirm(
-                    "Are you sure you want to delete this instructor?"
-                )
-            ) {
-                return;
-            }
-
-
-            fetch("/instructors/" + id, {
-
-                method: "DELETE"
-
-            })
-
-            .then(response => {
-
-                if (!response.ok) {
-
-                    return response.text()
-                        .then(message => {
-
-                            throw new Error(
-                                message || "Delete failed"
-                            );
-
-                        });
-
-                }
-
-                return response.text();
-
-            })
-
-            .then(() => {
-
-                showMessage(
-                    "Instructor deleted successfully",
-                    true
-                );
-
-
-                setTimeout(() => {
-
-                    location.reload();
-
-                }, 700);
-
-            })
-
-            .catch(error => {
-
-                console.error(error);
-
-                showMessage(
-                    error.message ||
-                    "Unable to delete instructor",
-                    false
-                );
-
-            });
-
-        }
-
-
-        function searchInstructor() {
-
-            const value =
-                document
-                    .getElementById("search")
-                    .value
-                    .toLowerCase();
-
-
-            const rows =
-                document.querySelectorAll(
-                    "#instructorTable tr"
-                );
-
-
-            rows.forEach(row => {
-
-                const text =
-                    row.innerText.toLowerCase();
-
-
-                row.style.display =
-                    text.includes(value)
-                        ? ""
-                        : "none";
-
-            });
-
-        }
-
-    </script>
-
+  </div>
+</main>
+</div>
+
+<!-- Delete confirm -->
+<div class="modal" id="modal" hidden>
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="mt">
+    <h3 id="mt">Delete instructor?</h3>
+    <div class="sub" id="mb"></div>
+    <div class="acts"><button class="btn red out fill" id="mdel">Delete</button><button class="btn out" id="mno">Cancel</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script th:inline="javascript">
+// Existing InstructorController: GET/POST/PUT /instructors, GET/DELETE /instructors/{id}
+const API=/*[[@{/instructors}]]*/'/instructors';
+// true  = backend ID khud generate karta hai (@GeneratedValue), POST mein id nahi bhejte.
+// false = backend mein @GeneratedValue nahi hai, frontend max+1 id bhejega.
+const AUTO_ID_FROM_BACKEND=true;
+
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let all=[],view=[],editing=null,pending=null,note='',down=false,timer;
+
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),1800)}
+function setDot(ok){down=!ok;$('dot').classList.toggle('down',!ok)}
+
+async function loadAll(){
+  try{
+    const res=await fetch(API);
+    if(!res.ok)throw 0;
+    all=await res.json();setDot(true);
+  }catch(e){all=[];setDot(false)}
+}
+
+function render(){
+  $('rows').innerHTML=view.map(r=>`<tr><td>${esc(r.id)}</td><td>${esc(r.name)}</td><td>${esc(r.email)}</td><td>${esc(r.specialization)}</td><td style="white-space:nowrap"><button class="btn" data-e="${r.id}">Edit</button> <button class="btn red" data-d="${r.id}">Delete</button></td></tr>`).join('');
+  $('total').textContent=all.length;
+  $('latest').innerHTML=(all.length?Math.max(...all.map(r=>r.id)):0)+'<small>id</small>';
+  const text=note||(view.length?'':'No instructors yet. Add one using the form.');
+  const e=$('empty');e.textContent=text;e.className='empty'+(note?' bad':'');e.hidden=!text;
+}
+
+// ID search: sirf wahi ID dikhao, nahi mili to red message
+async function search(){
+  const v=$('q').value.trim();note='';
+  if(down){view=[];note='Could not reach Instructor Service on port 8083.';render();return}
+  if(!v){view=all;render();return}
+  if(!/^\d+$/.test(v)){view=[];note='Enter a numeric ID to search.';render();return}
+  try{
+    const res=await fetch(API+'/'+v);
+    if($('q').value.trim()!==v)return;           // user ne aage type kar diya
+    // Backend ID na milne par kabhi 404, kabhi 200 + khali body bhejta hai. Dono ko "not found" maanenge.
+    const txt=res.ok?await res.text():'';
+    if(txt.trim()){view=[JSON.parse(txt)]}
+    else{view=[];note='Instructor ID '+v+' not found'}
+  }catch(e){view=[];note='Could not reach Instructor Service on port 8083.'}
+  render();
+}
+async function refresh(){await loadAll();await search()}
+
+function clearForm(){
+  editing=null;
+  ['f_id','f_name','f_email','f_specialization'].forEach(i=>$(i).value='');
+  $('idw').hidden=true;
+  $('ft').textContent='Add instructor';$('fs').textContent='POST /instructors';
+  $('save').textContent='Save instructor';$('err').textContent='';
+}
+
+async function save(){
+  const bad=m=>{$('err').textContent=m};
+  const name=$('f_name').value.trim(),email=$('f_email').value.trim(),specialization=$('f_specialization').value.trim();
+  if(!name)return bad('Enter a valid Name.');
+  if(!email||!email.includes('@'))return bad('Enter a valid Email.');
+  if(!specialization)return bad('Enter a valid Specialization.');
+  const o={name,email,specialization},isEdit=editing!==null;
+  try{
+    if(isEdit)o.id=editing;
+    else if(!AUTO_ID_FROM_BACKEND){
+      const l=await (await fetch(API)).json();
+      o.id=l.length?Math.max(...l.map(x=>x.id))+1:1;
+    }
+    const res=await fetch(API,{method:isEdit?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)});
+    if(!res.ok)throw 0;
+    toast(isEdit?'Instructor updated':'Instructor added');
+    clearForm();await refresh();
+  }catch(e){bad('Could not save the instructor. Check that the service is running.')}
+}
+
+// delete confirm (in-page)
+function openDel(r){
+  pending=r;
+  $('mb').textContent='ID '+r.id+' \u00B7 '+(r.name||'')+' will be removed permanently.';
+  $('modal').hidden=false;$('mno').focus();
+}
+function closeDel(){$('modal').hidden=true;pending=null}
+async function doDelete(){
+  const r=pending;if(!r)return;closeDel();
+  try{
+    const res=await fetch(API+'/'+r.id,{method:'DELETE'});
+    await refresh();
+    if(res.ok){toast('Instructor deleted');if(editing==r.id)clearForm()}
+    else{note=res.status===404?'Instructor ID '+r.id+' not found':'Could not delete Instructor ID '+r.id+'. Please try again.';render()}
+  }catch(e){note='Could not reach Instructor Service on port 8083.';render()}
+}
+
+document.addEventListener('click',e=>{
+  const t=e.target;
+  if(t.dataset.e){
+    const r=view.find(q=>q.id==t.dataset.e);if(!r)return;
+    editing=r.id;
+    $('idw').hidden=false;$('f_id').value=r.id;
+    $('f_name').value=r.name??'';$('f_email').value=r.email??'';$('f_specialization').value=r.specialization??'';
+    $('ft').textContent='Edit instructor';$('fs').textContent='PUT /instructors';
+    $('save').textContent='Update instructor';$('err').textContent='';
+    $('f_name').focus();
+  }
+  if(t.dataset.d){const r=view.find(q=>q.id==t.dataset.d);if(r)openDel(r)}
+  if(t===$('modal'))closeDel();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modal').hidden)closeDel()});
+$('mno').onclick=closeDel;$('mdel').onclick=doDelete;
+$('save').onclick=save;$('reset').onclick=clearForm;
+$('q').oninput=()=>{clearTimeout(timer);timer=setTimeout(search,250)};
+refresh();
+</script>
 </body>
-
 </html>

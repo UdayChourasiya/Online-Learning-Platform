@@ -1,1569 +1,354 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>StudentHub | Enrollment Management</title>
-
-
-    <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", Arial, sans-serif;
-        }
-
-        body {
-            background: #f4f6fb;
-            color: #1f2937;
-        }
-
-
-        /* ================= SIDEBAR ================= */
-
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 245px;
-            height: 100vh;
-
-            background: #111827;
-            color: white;
-
-            padding: 25px 18px;
-
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 25px;
-            font-weight: 700;
-
-            margin-bottom: 8px;
-            padding-left: 10px;
-        }
-
-        .logo span {
-            color: #818cf8;
-        }
-
-        .subtitle {
-            color: #9ca3af;
-            font-size: 12px;
-
-            padding-left: 10px;
-            margin-bottom: 30px;
-        }
-
-        .nav-title {
-            font-size: 11px;
-            color: #6b7280;
-
-            text-transform: uppercase;
-            letter-spacing: 1px;
-
-            padding: 0 10px;
-            margin-bottom: 10px;
-        }
-
-        .nav a {
-            display: block;
-
-            text-decoration: none;
-
-            color: #d1d5db;
-
-            padding: 12px 13px;
-
-            border-radius: 10px;
-
-            margin-bottom: 6px;
-
-            font-size: 14px;
-
-            transition: 0.3s;
-        }
-
-        .nav a:hover {
-            background: #1f2937;
-            color: white;
-        }
-
-        .nav a.active {
-            background:
-                linear-gradient(
-                    135deg,
-                    #4f46e5,
-                    #7c3aed
-                );
-
-            color: white;
-
-            box-shadow:
-                0 8px 20px
-                rgba(79, 70, 229, 0.25);
-        }
-
-
-        /* ================= MAIN ================= */
-
-        .main {
-            margin-left: 245px;
-            padding: 28px 35px;
-        }
-
-
-        /* ================= TOPBAR ================= */
-
-        .topbar {
-            display: flex;
-
-            justify-content: space-between;
-            align-items: center;
-
-            margin-bottom: 25px;
-        }
-
-        .topbar h1 {
-            font-size: 26px;
-            color: #111827;
-        }
-
-        .service-badge {
-            background: white;
-
-            padding: 9px 16px;
-
-            border-radius: 20px;
-
-            font-size: 13px;
-
-            color: #4f46e5;
-
-            font-weight: 600;
-
-            box-shadow:
-                0 3px 12px
-                rgba(0, 0, 0, 0.07);
-        }
-
-
-        /* ================= HERO ================= */
-
-        .hero {
-            background:
-                linear-gradient(
-                    135deg,
-                    #4338ca,
-                    #7c3aed
-                );
-
-            color: white;
-
-            padding: 30px;
-
-            border-radius: 18px;
-
-            margin-bottom: 25px;
-
-            box-shadow:
-                0 12px 30px
-                rgba(79, 70, 229, 0.22);
-        }
-
-        .hero h2 {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .hero p {
-            color: #e0e7ff;
-            font-size: 14px;
-        }
-
-
-        /* ================= STATS ================= */
-
-        .stats {
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, 1fr);
-
-            gap: 18px;
-
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: white;
-
-            border-radius: 15px;
-
-            padding: 20px;
-
-            box-shadow:
-                0 5px 18px
-                rgba(0, 0, 0, 0.06);
-        }
-
-        .stat-title {
-            font-size: 13px;
-
-            color: #6b7280;
-
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 24px;
-
-            font-weight: 700;
-
-            color: #111827;
-        }
-
-
-        /* ================= CONTENT ================= */
-
-        .content-grid {
-            display: grid;
-
-            grid-template-columns: 330px 1fr;
-
-            gap: 25px;
-        }
-
-        .panel {
-            background: white;
-
-            border-radius: 17px;
-
-            padding: 23px;
-
-            box-shadow:
-                0 5px 20px
-                rgba(0, 0, 0, 0.06);
-        }
-
-        .panel h3 {
-            margin-bottom: 20px;
-
-            font-size: 18px;
-
-            color: #111827;
-        }
-
-
-        /* ================= FORM ================= */
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-
-            font-size: 13px;
-
-            font-weight: 600;
-
-            margin-bottom: 7px;
-
-            color: #374151;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-
-            padding: 11px 12px;
-
-            border: 1px solid #d1d5db;
-
-            border-radius: 9px;
-
-            outline: none;
-
-            font-size: 14px;
-
-            transition: 0.2s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #6366f1;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(99, 102, 241, 0.1);
-        }
-
-
-        /* ================= BUTTON ================= */
-
-        .btn {
-            width: 100%;
-
-            border: none;
-
-            padding: 12px;
-
-            border-radius: 9px;
-
-            cursor: pointer;
-
-            font-size: 14px;
-
-            font-weight: 600;
-
-            transition: 0.3s;
-        }
-
-        .btn-primary {
-            background:
-                linear-gradient(
-                    135deg,
-                    #4f46e5,
-                    #7c3aed
-                );
-
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-
-            box-shadow:
-                0 8px 18px
-                rgba(79, 70, 229, 0.25);
-        }
-
-        .btn-cancel {
-            background: #e5e7eb;
-
-            color: #374151;
-
-            margin-top: 9px;
-
-            display: none;
-        }
-
-
-        /* ================= STATUS MESSAGE ================= */
-
-        #message {
-
-            display: none;
-
-            margin-top: 14px;
-
-            padding: 11px 13px;
-
-            border-radius: 9px;
-
-            font-size: 12px;
-
-            font-weight: 600;
-
-            text-align: center;
-
-            line-height: 1.4;
-        }
-
-
-        /* ================= TABLE ================= */
-
-        .table-header {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-bottom: 18px;
-        }
-
-        .search-box {
-            padding: 10px 13px;
-
-            width: 230px;
-
-            border: 1px solid #d1d5db;
-
-            border-radius: 9px;
-
-            outline: none;
-        }
-
-        table {
-            width: 100%;
-
-            border-collapse: collapse;
-        }
-
-        th {
-            text-align: left;
-
-            background: #f9fafb;
-
-            color: #6b7280;
-
-            font-size: 12px;
-
-            padding: 13px;
-
-            text-transform: uppercase;
-        }
-
-        td {
-            padding: 14px 13px;
-
-            border-bottom:
-                1px solid #eef0f4;
-
-            font-size: 13px;
-        }
-
-        tr:hover td {
-            background: #fafaff;
-        }
-
-        .status {
-            padding: 5px 10px;
-
-            border-radius: 20px;
-
-            font-size: 11px;
-
-            font-weight: 600;
-
-            background: #eef2ff;
-
-            color: #4f46e5;
-        }
-
-        .actions button {
-            border: none;
-
-            padding: 7px 10px;
-
-            border-radius: 7px;
-
-            cursor: pointer;
-
-            font-size: 12px;
-
-            margin-right: 4px;
-        }
-
-        .edit-btn {
-            background: #fef3c7;
-
-            color: #92400e;
-        }
-
-        .delete-btn {
-            background: #fee2e2;
-
-            color: #b91c1c;
-        }
-
-        .empty {
-            text-align: center;
-
-            padding: 35px;
-
-            color: #9ca3af;
-        }
-
-
-        /* ================= RESPONSIVE ================= */
-
-        @media (max-width: 1000px) {
-
-            .stats {
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-    </style>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Enrollment Service &middot; Online Learning Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--stage:#0A1626;--bg:#F7F3EA;--card:#FFFDF8;--ink:#14243A;--mute:#7C8594;--line:#E6DCC4;--gold:#B8923F;--gold2:#E3C77A;--navy:#0F2340;--side:#0F2340;--sideink:#B5BFCC;--bad:#B5483F;--ok:#2F8F6B}
+*,*:before,*:after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:radial-gradient(circle at 20% 0%,#16345C,var(--stage) 60%);font-family:"Inter","Segoe UI",sans-serif;color:var(--ink);padding:16px;min-height:100%}
+.app{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;background:var(--bg);border-radius:20px;overflow:hidden;border:1px solid var(--gold);box-shadow:0 30px 60px rgba(0,0,0,.45),0 0 0 6px rgba(201,169,97,.12)}
+aside{background:linear-gradient(180deg,var(--side),#0A1830);padding:22px 14px;color:var(--sideink)}
+.logo{display:flex;align-items:center;gap:10px;margin:0 8px 22px}
+.mono{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--gold2);display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-weight:700;color:var(--gold2);box-shadow:inset 0 0 0 3px rgba(227,199,122,.15)}
+.logo b{font-family:"Cormorant Garamond",serif;font-size:16px;color:#fff;line-height:1.1}.logo span{display:block;font-size:11px;color:var(--gold2);letter-spacing:.06em}
+.nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--sideink);text-decoration:none;font-size:14px;font-weight:300;margin-bottom:3px;border:1px solid transparent}
+.nav a i{font-style:normal;width:20px;text-align:center}
+.nav a.on{color:var(--gold2);font-weight:600;background:rgba(227,199,122,.08);border-color:rgba(227,199,122,.35)}
+main{padding:22px 24px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.top h1{font-family:"Cormorant Garamond",serif;font-size:30px;margin:0;line-height:1}
+.top p{margin:4px 0 0;color:var(--mute);font-size:13px}
+.grow{flex:1}
+.port{display:flex;align-items:center;gap:8px;border:1px solid var(--gold);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;background:var(--card)}
+.port small{color:var(--mute);font-weight:400}.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(47,143,107,.2)}
+.dot.down{background:var(--bad);box-shadow:0 0 0 3px rgba(181,72,63,.2)}
+.gold{display:inline-flex;align-items:center;gap:6px;text-decoration:none;border:0;cursor:pointer;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#231A05;padding:9px 16px;border-radius:10px;font:inherit;font-size:13px;font-weight:600;box-shadow:0 4px 14px rgba(184,146,63,.35)}
+.gold:focus-visible,.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--card);border-radius:14px;padding:18px;border:1px solid var(--line);box-shadow:0 8px 24px rgba(15,35,64,.08)}
+.card h3{margin:0;font-family:"Cormorant Garamond",serif;font-size:20px}.card .sub{color:var(--mute);font-size:12px;margin:2px 0 12px}
+.big{font-family:"Cormorant Garamond",serif;font-size:52px;font-weight:700;line-height:1;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.big small{font-family:Inter,sans-serif;font-size:13px;color:var(--mute);-webkit-text-fill-color:var(--mute);margin-left:6px}
+.ep{display:flex;gap:8px;font-size:12px;margin:6px 0;align-items:center}
+.ep b{font-size:10px;padding:2px 6px;border-radius:4px;color:#fff;min-width:48px;text-align:center;letter-spacing:.03em}
+.get{background:#2F8F6B}.post{background:#2F6FB5}.put{background:#B9822C}.del{background:#B5483F}
+.two{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--gold);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--gold)}
+td{padding:11px 8px;border-bottom:1px solid var(--line)}
+.dash{color:var(--mute)}
+.empty{color:var(--mute);text-align:center;padding:22px;font-size:13px}
+.empty.bad{color:var(--bad);font-weight:600}
+label{display:block;font-size:12px;color:var(--mute);margin:10px 0 4px}
+input.f{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px}
+input.f:focus,.search:focus-within{outline:2px solid var(--gold);outline-offset:1px}
+.search{display:flex;align-items:center;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:0 12px}
+.search input{border:0;background:none;color:var(--ink);padding:9px 0;outline:none;width:150px;font:inherit;font-size:14px}
+.err{color:var(--bad);font-size:12px;min-height:16px;margin-top:4px}
+.err.small{min-height:0}
+.err.ok{color:var(--ok)}
+.btn{border:1px solid var(--gold);background:none;color:var(--gold);padding:4px 10px;border-radius:8px;font:inherit;font-size:12px;cursor:pointer}
+.btn.red{border-color:var(--bad);color:var(--bad)}.btn.out{padding:9px 14px;font-size:13px}
+.btn.red.fill{background:var(--bad);color:#fff}
+.acts{display:flex;gap:8px;margin-top:12px}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--navy);color:var(--gold2);border:1px solid var(--gold);padding:9px 18px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+/* delete confirm (in-page, browser popup ki jagah) */
+.modal{position:fixed;inset:0;background:rgba(10,22,38,.55);display:grid;place-items:center;z-index:50;padding:16px}
+.modal[hidden]{display:none}
+.dlg{background:var(--card);border:1px solid var(--gold);border-radius:14px;padding:20px;width:min(360px,100%);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.dlg h3{margin:0;font-family:"Cormorant Garamond",serif;font-size:22px}
+.dlg .sub{color:var(--mute);font-size:13px;margin:6px 0 4px}
+@media (max-width:800px){.app{grid-template-columns:1fr}.nav{display:flex;gap:4px;overflow-x:auto}.nav a{white-space:nowrap}.row,.two{grid-template-columns:1fr}}
+</style>
 </head>
-
-
 <body>
+<div class="app">
+<aside>
+  <div class="logo"><div class="mono">EP</div><div><b>Online Learning Management System</b><span>Microservices</span></div></div>
+  <nav class="nav">
+    <a th:href="@{http://localhost:8081/dashboard}"><i>&#128202;</i>Dashboard</a>
+    <a th:href="@{http://localhost:8081/student}"><i>&#127891;</i>Student</a>
+    <a th:href="@{http://localhost:8082/course}"><i>&#128218;</i>Course</a>
+    <a th:href="@{http://localhost:8083/instructor}"><i>&#128100;</i>Instructor</a>
+    <a th:href="@{http://localhost:8084/enrollment}" class="on"><i>&#128221;</i>Enrollment</a>
+    <a th:href="@{http://localhost:8085/payment}"><i>&#128179;</i>Payment</a>
+    <a th:href="@{http://localhost:8086/assignments}"><i>&#128204;</i>Assignment</a>
+    <a th:href="@{http://localhost:8087/result}"><i>&#127941;</i>Result</a>
+  </nav>
+</aside>
+<main>
+  <div class="top">
+    <div><h1>Enrollment Service</h1><p>Online Learning Management System &middot; Enrollment records</p></div>
+    <div class="grow"></div>
+    <div class="port"><span class="dot" id="dot"></span><span>PORT 8084</span> <small>enrollment-service</small></div>
+    <a class="gold" href="http://localhost:8761" target="_blank" rel="noopener">&#128752;&#65039; Open Eureka &middot; 8761</a>
+  </div>
 
+  <div class="row">
+    <div class="card"><h3>Total enrollments</h3><div class="sub">Records in springdb77</div><div class="big" id="total">0</div></div>
+    <div class="card"><h3>Latest ID</h3><div class="sub">Highest id saved</div><div class="big" id="latest">0<small>id</small></div></div>
+    <div class="card"><h3>Endpoints</h3><div class="sub">Base path /enrollments</div>
+      <div class="ep"><b class="post">POST</b>/enrollments?studentId&amp;courseId</div>
+      <div class="ep"><b class="get">GET</b>/enrollments, /{id}</div>
+      <div class="ep"><b class="put">PUT</b>/enrollments</div>
+      <div class="ep"><b class="del">DELETE</b>/enrollments/{id}</div>
+    </div>
+  </div>
 
-<!-- ================= SIDEBAR ================= -->
-
-<div class="sidebar">
-
-    <div class="logo">
-
-        Student<span>Hub</span>
-
+  <div class="two">
+    <!-- LEFT: table -->
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div><h3>All enrollments</h3><div class="sub" style="margin-bottom:0">GET /enrollments</div></div>
+        <div class="grow"></div>
+        <label class="search" style="margin:0"><input id="q" inputmode="numeric" placeholder="Search by ID" aria-label="Search enrollment by ID"><span aria-hidden="true">&#128269;</span></label>
+      </div>
+      <div class="wrap" style="margin-top:10px">
+        <table>
+          <thead><tr><th>ID</th><th>Student ID</th><th>Course ID</th><th>Enrollment date</th><th>Status</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="empty" role="alert" hidden></div>
     </div>
 
-
-    <div class="subtitle">
-
-        Educational Platform
-
+    <!-- RIGHT: add / edit form -->
+    <div class="card">
+      <h3 id="ft">Add enrollment</h3><div class="sub" id="fs">POST /enrollments</div>
+      <!-- Enrollment ki apni ID sirf Edit mein dikhti hai (read-only). Student ID / Course ID manually likhni hain. -->
+      <div id="idw" hidden><label for="f_id">ID</label><input class="f" id="f_id" type="text" disabled></div>
+      <label for="f_studentId">Student ID</label>
+      <input class="f" id="f_studentId" type="text" inputmode="numeric" placeholder="e.g. 1" autocomplete="off">
+      <div class="err small" id="err_s" role="alert"></div>
+      <label for="f_courseId">Course ID</label>
+      <input class="f" id="f_courseId" type="text" inputmode="numeric" placeholder="e.g. 1" autocomplete="off">
+      <div class="err small" id="err_c" role="alert"></div>
+      <label for="f_status">Status</label><input class="f" id="f_status" type="text" placeholder="e.g. ACTIVE">
+      <div class="err" id="err" role="alert"></div>
+      <div class="acts"><button class="gold" id="save">Save enrollment</button><button class="btn out" id="reset">Clear</button></div>
     </div>
-
-
-    <div class="nav-title">
-
-        Services
-
-    </div>
-
-
-    <div class="nav">
-
-
-        <a href="http://localhost:8081/students-ui">
-
-            Students
-
-        </a>
-
-
-        <a href="http://localhost:8082/courses-ui">
-
-            Courses
-
-        </a>
-
-
-        <a href="http://localhost:8083/instructors-ui">
-
-            Instructors
-
-        </a>
-
-
-        <a href="http://localhost:8084/enrollments-ui"
-           class="active">
-
-            Enrollments
-
-        </a>
-
-
-        <a href="http://localhost:8085/payments-ui">
-
-            Payments
-
-        </a>
-
-
-        <a href="http://localhost:8086/assignments-ui">
-
-            Assignments
-
-        </a>
-
-
-        <a href="http://localhost:8087/results-ui">
-
-            Results
-
-        </a>
-
-
-        <a href="http://localhost:8761">
-
-            Eureka Server
-
-        </a>
-
-
-    </div>
-
+  </div>
+</main>
 </div>
 
-
-
-<!-- ================= MAIN ================= -->
-
-<div class="main">
-
-
-    <!-- TOPBAR -->
-
-    <div class="topbar">
-
-        <h1>
-            Enrollment Management
-        </h1>
-
-
-        <div class="service-badge">
-
-            Enrollment Service • 8084
-
-        </div>
-
-    </div>
-
-
-
-    <!-- HERO -->
-
-    <div class="hero">
-
-        <h2>
-            Welcome to Enrollment Management
-        </h2>
-
-        <p>
-            Manage student course enrollments efficiently
-            from one place.
-        </p>
-
-    </div>
-
-
-
-    <!-- STATS -->
-
-    <div class="stats">
-
-
-        <div class="stat-card">
-
-            <div class="stat-title">
-                Total Enrollments
-            </div>
-
-            <div class="stat-value"
-                 th:text="${#lists.size(enrollments)}">
-
-                0
-
-            </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <div class="stat-title">
-                Service Status
-            </div>
-
-            <div class="stat-value">
-                Online
-            </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <div class="stat-title">
-                Service Port
-            </div>
-
-            <div class="stat-value">
-                8084
-            </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <div class="stat-title">
-                Database
-            </div>
-
-            <div class="stat-value">
-                MySQL
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- ================= CONTENT ================= -->
-
-    <div class="content-grid">
-
-
-        <!-- ================= FORM ================= -->
-
-        <div class="panel">
-
-
-            <h3 id="formTitle">
-
-                Add Enrollment
-
-            </h3>
-
-
-            <form id="enrollmentForm">
-
-
-                <input
-                    type="hidden"
-                    id="id">
-
-
-                <!-- STUDENT ID -->
-
-                <div class="form-group">
-
-                    <label>
-                        Student ID
-                    </label>
-
-                    <input
-                        type="number"
-                        id="studentId"
-                        placeholder="Enter student ID"
-                        required>
-
-                </div>
-
-
-                <!-- COURSE ID -->
-
-                <div class="form-group">
-
-                    <label>
-                        Course ID
-                    </label>
-
-                    <input
-                        type="number"
-                        id="courseId"
-                        placeholder="Enter course ID"
-                        required>
-
-                </div>
-
-
-                <!-- STATUS -->
-
-                <div class="form-group">
-
-                    <label>
-                        Enrollment Status
-                    </label>
-
-                    <select
-                        id="status"
-                        required>
-
-                        <option value="">
-                            Select Status
-                        </option>
-
-                        <option value="ACTIVE">
-                            ACTIVE
-                        </option>
-
-                        <option value="COMPLETED">
-                            COMPLETED
-                        </option>
-
-                        <option value="CANCELLED">
-                            CANCELLED
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <!-- SAVE -->
-
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                    id="saveBtn">
-
-                    Add Enrollment
-
-                </button>
-
-
-                <!-- CANCEL -->
-
-                <button
-                    type="button"
-                    class="btn btn-cancel"
-                    id="cancelBtn"
-                    onclick="cancelEdit()">
-
-                    Cancel
-
-                </button>
-
-
-                <!-- STATUS MESSAGE -->
-
-                <div id="message"></div>
-
-
-            </form>
-
-        </div>
-
-
-
-        <!-- ================= TABLE ================= -->
-
-        <div class="panel">
-
-
-            <div class="table-header">
-
-                <h3>
-                    Enrollment Records
-                </h3>
-
-
-                <input
-                    type="text"
-                    class="search-box"
-                    id="searchInput"
-                    placeholder="Search enrollment...">
-
-            </div>
-
-
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>ID</th>
-
-                        <th>Student ID</th>
-
-                        <th>Course ID</th>
-
-                        <th>Enrollment Date</th>
-
-                        <th>Status</th>
-
-                        <th>Action</th>
-
-                    </tr>
-
-                </thead>
-
-
-
-                <tbody id="enrollmentTable">
-
-
-                    <tr
-                        th:each="enrollment : ${enrollments}">
-
-
-                        <td
-                            th:text="${enrollment.id}">
-
-                            1
-
-                        </td>
-
-
-                        <td
-                            th:text="${enrollment.studentid}">
-
-                            1
-
-                        </td>
-
-
-                        <td
-                            th:text="${enrollment.courseid}">
-
-                            1
-
-                        </td>
-
-
-                        <td
-                            th:text="${enrollment.enrollmentDate}">
-
-                            2026-09-18
-
-                        </td>
-
-
-                        <td>
-
-                            <span
-                                class="status"
-                                th:text="${enrollment.status}">
-
-                                ACTIVE
-
-                            </span>
-
-                        </td>
-
-
-                        <td class="actions">
-
-
-                            <button
-                                class="edit-btn"
-
-                                th:attr="
-                                onclick=|editEnrollment(
-                                '${enrollment.id}',
-                                '${enrollment.studentid}',
-                                '${enrollment.courseid}',
-                                '${enrollment.status}'
-                                )|">
-
-                                Edit
-
-                            </button>
-
-
-                            <button
-                                class="delete-btn"
-
-                                th:attr="
-                                onclick=|deleteEnrollment(
-                                '${enrollment.id}'
-                                )|">
-
-                                Delete
-
-                            </button>
-
-
-                        </td>
-
-                    </tr>
-
-
-
-                    <tr
-                        th:if="${#lists.isEmpty(enrollments)}">
-
-                        <td
-                            colspan="6"
-                            class="empty">
-
-                            No enrollment records found.
-
-                        </td>
-
-                    </tr>
-
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
+<!-- Delete confirm -->
+<div class="modal" id="modal" hidden>
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="mt">
+    <h3 id="mt">Delete enrollment?</h3>
+    <div class="sub" id="mb"></div>
+    <div class="acts"><button class="btn red out fill" id="mdel">Delete</button><button class="btn out" id="mno">Cancel</button></div>
+  </div>
 </div>
 
+<div class="toast" id="toast"></div>
 
+<script th:inline="javascript">
+// EnrollmentController: GET/POST/PUT /enrollments, GET/DELETE /enrollments/{id}
+const API=/*[[@{/enrollments}]]*/'/enrollments';
+const HOST=location.hostname||'localhost';
+// Add ke time ID check ke liye seedha Student (8081) aur Course (8082) service se poochte hain
+const STUDENT_API='http://'+HOST+':8081/students';
+const COURSE_API='http://'+HOST+':8082/courses';
+const MAX_INT=2147483647;     // backend mein id Java int hai
 
-<script>
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const JSON_H={'Content-Type':'application/json'};
 
+// JSON key ka case/underscore ignore karke value padhta hai (studentId, studentid, student_id sab chalenge)
+const pick=(r,name)=>{
+  const k=Object.keys(r||{}).find(x=>x.toLowerCase().replace(/_/g,'')===name);
+  return k===undefined?undefined:r[k];
+};
+const studentOf=r=>pick(r,'studentid');
+const courseOf=r=>pick(r,'courseid');
+const has=v=>v!==undefined&&v!==null&&v!=='';
+const show0=v=>has(v)?esc(v):'<span class="dash">\u2014</span>';
+const isNum=v=>/^\d+$/.test(v)&&Number(v)<=MAX_INT;
 
-const API_URL =
-    "http://localhost:8084/enrollments";
+// kind: 's' = Student, 'c' = Course
+const KIND={
+  s:{input:'f_studentId',err:'err_s',api:STUDENT_API,label:'Student',port:8081,name:r=>r.name},
+  c:{input:'f_courseId',err:'err_c',api:COURSE_API,label:'Course',port:8082,name:r=>r.courseName}
+};
+const tok={s:0,c:0};
 
+let all=[],view=[],editing=null,editRec=null,pending=null,note='',down=false,timer;
+const dtimer={s:null,c:null};
 
-const form =
-    document.getElementById(
-        "enrollmentForm"
-    );
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),1800)}
+function setDot(ok){down=!ok;$('dot').classList.toggle('down',!ok)}
 
-
-const idInput =
-    document.getElementById("id");
-
-
-const studentIdInput =
-    document.getElementById("studentId");
-
-
-const courseIdInput =
-    document.getElementById("courseId");
-
-
-const statusInput =
-    document.getElementById("status");
-
-
-const saveBtn =
-    document.getElementById("saveBtn");
-
-
-const cancelBtn =
-    document.getElementById("cancelBtn");
-
-
-const formTitle =
-    document.getElementById("formTitle");
-
-
-const searchInput =
-    document.getElementById("searchInput");
-
-
-/* ================= STATUS MESSAGE ================= */
-
-function showMessage(
-    message,
-    success = true
-) {
-
-    const messageBox =
-        document.getElementById(
-            "message"
-        );
-
-
-    messageBox.innerText =
-        message;
-
-
-    messageBox.style.display =
-        "block";
-
-
-    if (success) {
-
-        messageBox.style.color =
-            "#166534";
-
-        messageBox.style.background =
-            "#dcfce7";
-
-        messageBox.style.border =
-            "1px solid #bbf7d0";
-
-    }
-    else {
-
-        messageBox.style.color =
-            "#991b1b";
-
-        messageBox.style.background =
-            "#fee2e2";
-
-        messageBox.style.border =
-            "1px solid #fecaca";
-
-    }
-
-
-    setTimeout(() => {
-
-        messageBox.style.display =
-            "none";
-
-    }, 4000);
-
+async function loadAll(){
+  try{
+    const res=await fetch(API);
+    if(!res.ok)throw 0;
+    all=await res.json();setDot(true);
+  }catch(e){all=[];setDot(false)}
 }
 
-
-
-/* ================= ADD / UPDATE ================= */
-
-form.addEventListener(
-    "submit",
-    async function(event) {
-
-        event.preventDefault();
-
-
-        const id =
-            idInput.value;
-
-
-        const studentId =
-            parseInt(
-                studentIdInput.value
-            );
-
-
-        const courseId =
-            parseInt(
-                courseIdInput.value
-            );
-
-
-        const status =
-            statusInput.value;
-
-
-        try {
-
-
-            let response;
-
-
-            /* ================= UPDATE ================= */
-
-            if (id) {
-
-
-                const enrollment = {
-
-                    id: parseInt(id),
-
-                    studentid:
-                        studentId,
-
-                    courseid:
-                        courseId,
-
-                    enrollmentDate:
-                        new Date()
-                        .toISOString()
-                        .split("T")[0],
-
-                    status:
-                        status
-
-                };
-
-
-                response =
-                    await fetch(
-                        API_URL,
-                        {
-
-                            method: "PUT",
-
-                            headers: {
-
-                                "Content-Type":
-                                    "application/json"
-
-                            },
-
-                            body:
-                                JSON.stringify(
-                                    enrollment
-                                )
-
-                        }
-                    );
-
-            }
-
-
-            /* ================= ADD ================= */
-
-            else {
-
-
-                const enrollment = {
-
-                    studentId:
-                        studentId,
-
-                    courseId:
-                        courseId,
-
-                    status:
-                        status
-
-                };
-
-
-                response =
-                    await fetch(
-
-                        `${API_URL}?courseId=${courseId}&studentId=${studentId}`,
-
-                        {
-
-                            method: "POST",
-
-                            headers: {
-
-                                "Content-Type":
-                                    "application/json"
-
-                            },
-
-                            body:
-                                JSON.stringify(
-                                    enrollment
-                                )
-
-                        }
-
-                    );
-
-            }
-
-
-
-            /* ================= RESPONSE ================= */
-
-            if (!response.ok) {
-
-
-                const errorMessage =
-                    await response.text();
-
-
-                throw new Error(
-                    errorMessage
-                );
-
-            }
-
-
-
-            /* ================= SUCCESS ================= */
-
-            showMessage(
-
-                id
-                    ? "Enrollment updated successfully!"
-                    : "Enrollment added successfully!",
-
-                true
-
-            );
-
-
-            setTimeout(() => {
-
-                location.reload();
-
-            }, 700);
-
-
-        }
-
-
-        /* ================= ERROR ================= */
-
-        catch (error) {
-
-
-            console.error(error);
-
-
-            const errorMessage =
-                error.message || "";
-
-
-            if (
-                errorMessage
-                    .toLowerCase()
-                    .includes("student")
-            ) {
-
-
-                showMessage(
-
-                    "Student ID is invalid. Student not found.",
-
-                    false
-
-                );
-
-            }
-
-
-            else if (
-                errorMessage
-                    .toLowerCase()
-                    .includes("course")
-            ) {
-
-
-                showMessage(
-
-                    "Course ID is invalid. Course not found.",
-
-                    false
-
-                );
-
-            }
-
-
-            else {
-
-
-                showMessage(
-
-                    errorMessage ||
-                    "Something went wrong. Please check the backend.",
-
-                    false
-
-                );
-
-            }
-
-        }
-
-    }
-);
-
-
-
-/* ================= EDIT ================= */
-
-function editEnrollment(
-    id,
-    studentId,
-    courseId,
-    status
-) {
-
-
-    idInput.value =
-        id;
-
-
-    studentIdInput.value =
-        studentId;
-
-
-    courseIdInput.value =
-        courseId;
-
-
-    statusInput.value =
-        status;
-
-
-    formTitle.innerText =
-        "Update Enrollment";
-
-
-    saveBtn.innerText =
-        "Update Enrollment";
-
-
-    cancelBtn.style.display =
-        "block";
-
-
-    window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
-    });
-
+// Table: sirf ID dikhti hai. Value na ho to —
+function render(){
+  $('rows').innerHTML=view.map(r=>`<tr><td>${esc(r.id)}</td><td>${show0(studentOf(r))}</td><td>${show0(courseOf(r))}</td><td>${esc(r.enrollmentDate)}</td><td>${esc(r.status)}</td><td style="white-space:nowrap"><button class="btn" data-e="${r.id}">Edit</button> <button class="btn red" data-d="${r.id}">Delete</button></td></tr>`).join('');
+  $('total').textContent=all.length;
+  $('latest').innerHTML=(all.length?Math.max(...all.map(r=>r.id)):0)+'<small>id</small>';
+  const text=note||(view.length?'':'No enrollments yet. Add one using the form.');
+  const e=$('empty');e.textContent=text;e.className='empty'+(note?' bad':'');e.hidden=!text;
 }
 
+// ID search: sirf wahi ID dikhao, nahi mili to red message
+async function search(){
+  const v=$('q').value.trim();note='';
+  if(down){view=[];note='Could not reach Enrollment Service on port 8084.';render();return}
+  if(!v){view=all;render();return}
+  if(!/^\d+$/.test(v)){view=[];note='Enter a numeric ID to search.';render();return}
+  try{
+    const res=await fetch(API+'/'+v);
+    if($('q').value.trim()!==v)return;           // user ne aage type kar diya
+    const txt=res.ok?await res.text():'';
+    if(txt.trim()){view=[JSON.parse(txt)]}
+    else{view=[];note='Enrollment ID '+v+' not found'}
+  }catch(e){view=[];note='Could not reach Enrollment Service on port 8084.'}
+  render();
+}
+async function refresh(){await loadAll();await search()}
 
-
-/* ================= CANCEL EDIT ================= */
-
-function cancelEdit() {
-
-
-    form.reset();
-
-
-    idInput.value =
-        "";
-
-
-    formTitle.innerText =
-        "Add Enrollment";
-
-
-    saveBtn.innerText =
-        "Add Enrollment";
-
-
-    cancelBtn.style.display =
-        "none";
-
-
-    document.getElementById(
-        "message"
-    ).style.display =
-        "none";
-
+// ---- Student ID / Course ID check (sirf Add ke time) ----
+// Service se us ID ka record maangta hai. Mila to {ok:true,rec}, nahi mila to {ok:false,msg}
+async function lookup(kind,v){
+  const k=KIND[kind];
+  if(!isNum(v))return {ok:false,msg:'Enter a valid '+k.label+' ID (numbers only).'};
+  try{
+    const r=await fetch(k.api+'/'+v);
+    const t=r.ok?(await r.text()).trim():'';
+    if(!t)return {ok:false,msg:k.label+' ID '+v+' not found'};
+    return {ok:true,rec:JSON.parse(t)};
+  }catch(e){return {ok:false,msg:'Could not reach '+k.label+' Service (port '+k.port+').'}}
 }
 
+// Result ko field ke niche dikhata hai: mila to green naam, nahi mila to red message
+function show(kind,r){
+  const el=$(KIND[kind].err);
+  if(r.ok){el.textContent=KIND[kind].label+': '+(KIND[kind].name(r.rec)||'found');el.className='err small ok'}
+  else{el.textContent=r.msg;el.className='err small'}
+}
+function hideMsg(kind){const el=$(KIND[kind].err);el.textContent='';el.className='err small'}
 
-
-/* ================= DELETE ================= */
-
-async function deleteEnrollment(id) {
-
-
-    if (
-        !confirm(
-            "Are you sure you want to delete this enrollment?"
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-
-        const response =
-            await fetch(
-
-                `${API_URL}/${id}`,
-
-                {
-
-                    method: "DELETE"
-
-                }
-
-            );
-
-
-        if (!response.ok) {
-
-
-            const errorMessage =
-                await response.text();
-
-
-            throw new Error(
-                errorMessage ||
-                "Unable to delete enrollment."
-            );
-
-        }
-
-
-        showMessage(
-
-            "Enrollment deleted successfully!",
-
-            true
-
-        );
-
-
-        setTimeout(() => {
-
-            location.reload();
-
-        }, 700);
-
-
-    }
-
-
-    catch (error) {
-
-
-        console.error(error);
-
-
-        showMessage(
-
-            error.message ||
-            "Unable to delete enrollment.",
-
-            false
-
-        );
-
-    }
-
+async function check(kind){
+  const v=$(KIND[kind].input).value.trim(),t=++tok[kind];
+  if(!v){hideMsg(kind);return null}
+  const r=await lookup(kind,v);
+  if(t!==tok[kind])return null;               // user ne aage type kar diya
+  show(kind,r);return r;
+}
+// Edit ke time type karne par koi check nahi. Add ke time hi check hota hai.
+function onType(kind){
+  clearTimeout(dtimer[kind]);
+  if(editing!==null){hideMsg(kind);return}
+  dtimer[kind]=setTimeout(()=>check(kind),400);
 }
 
+function clearForm(){
+  editing=null;editRec=null;
+  ['f_id','f_studentId','f_courseId','f_status'].forEach(i=>$(i).value='');
+  tok.s++;tok.c++;hideMsg('s');hideMsg('c');
+  $('idw').hidden=true;
+  $('ft').textContent='Add enrollment';$('fs').textContent='POST /enrollments';
+  $('save').textContent='Save enrollment';$('err').textContent='';
+}
 
-
-/* ================= SEARCH ================= */
-
-searchInput.addEventListener(
-
-    "keyup",
-
-    function() {
-
-
-        const searchValue =
-            this.value.toLowerCase();
-
-
-        const rows =
-            document.querySelectorAll(
-                "#enrollmentTable tr"
-            );
-
-
-        rows.forEach(function(row) {
-
-
-            const text =
-                row.innerText
-                    .toLowerCase();
-
-
-            if (
-                text.includes(
-                    searchValue
-                )
-            ) {
-
-                row.style.display =
-                    "";
-
-            }
-
-            else {
-
-                row.style.display =
-                    "none";
-
-            }
-
-        });
-
+async function save(){
+  const bad=m=>{$('err').textContent=m};
+  const sid=$('f_studentId').value.trim(),cid=$('f_courseId').value.trim(),status=$('f_status').value.trim();
+  $('err').textContent='';
+  const isEdit=editing!==null;
+  if(!sid){hideMsg('s');return bad('Enter a Student ID.')}
+  if(!cid){hideMsg('c');return bad('Enter a Course ID.')}
+  if(!status)return bad('Enter a valid Status.');
+  if(isEdit){
+    // Edit: ID exist karti hai ya nahi, ye check nahi hota. Bas number honi chahiye.
+    hideMsg('s');hideMsg('c');
+    if(!isNum(sid))return bad('Enter a valid Student ID (numbers only).');
+    if(!isNum(cid))return bad('Enter a valid Course ID (numbers only).');
+  }else{
+    // Add: save se pehle dono ID dobara check
+    tok.s++;tok.c++;
+    const [rs,rc]=await Promise.all([lookup('s',sid),lookup('c',cid)]);
+    show('s',rs);show('c',rc);
+    if(!rs.ok||!rc.ok)return;
+  }
+  try{
+    let res;
+    if(isEdit){
+      // Edit: Student ID aur Course ID badal sakte hain. Enrollment date wahi rehti hai.
+      // Key ke dono naam bhejte hain, jo backend ko chahiye wo le leta hai.
+      const s=Number(sid),c=Number(cid);
+      const o={id:editing,studentId:s,studentid:s,courseId:c,courseid:c,enrollmentDate:editRec?editRec.enrollmentDate:null,status};
+      res=await fetch(API,{method:'PUT',headers:JSON_H,body:JSON.stringify(o)});
+    }else{
+      // Add: ID aur date backend khud set karta hai
+      res=await fetch(API+'?courseId='+cid+'&studentId='+sid,{method:'POST',headers:JSON_H,body:JSON.stringify({status})});
     }
+    if(!res.ok){
+      const t=(await res.text()).trim();
+      if(res.status===404&&t&&t[0]!=='{')return bad(t);       // backend ka message: "Student ID 5 not found"
+      return bad('Could not save the enrollment. Please try again.');
+    }
+    toast(isEdit?'Enrollment updated':'Enrollment added');
+    clearForm();await refresh();
+  }catch(e){bad('Could not save the enrollment. Check that the service is running.')}
+}
 
-);
+// delete confirm (in-page)
+function openDel(r){
+  pending=r;
+  const s=studentOf(r),c=courseOf(r);
+  $('mb').textContent='ID '+r.id+' \u00B7 Student '+(has(s)?s:'\u2014')+' / Course '+(has(c)?c:'\u2014')+' will be removed permanently.';
+  $('modal').hidden=false;$('mno').focus();
+}
+function closeDel(){$('modal').hidden=true;pending=null}
+async function doDelete(){
+  const r=pending;if(!r)return;closeDel();
+  try{
+    const res=await fetch(API+'/'+r.id,{method:'DELETE'});
+    await refresh();
+    if(res.ok){toast('Enrollment deleted');if(editing==r.id)clearForm()}
+    else{note=res.status===404?'Enrollment ID '+r.id+' not found':'Could not delete Enrollment ID '+r.id+'. Please try again.';render()}
+  }catch(e){note='Could not reach Enrollment Service on port 8084.';render()}
+}
 
+document.addEventListener('click',e=>{
+  const t=e.target;
+  if(t.dataset.e){
+    const r=view.find(q=>q.id==t.dataset.e);if(!r)return;
+    editing=r.id;editRec=r;
+    $('idw').hidden=false;$('f_id').value=r.id;
+    const s=studentOf(r),c=courseOf(r);
+    $('f_studentId').value=has(s)?s:'';
+    $('f_courseId').value=has(c)?c:'';
+    $('f_status').value=r.status??'';
+    $('ft').textContent='Edit enrollment';$('fs').textContent='PUT /enrollments';
+    $('save').textContent='Update enrollment';$('err').textContent='';
+    tok.s++;tok.c++;hideMsg('s');hideMsg('c');   // Edit mein ID check nahi hota
+    $('f_studentId').focus();
+  }
+  if(t.dataset.d){const r=view.find(q=>q.id==t.dataset.d);if(r)openDel(r)}
+  if(t===$('modal'))closeDel();
+});
+$('f_studentId').addEventListener('input',()=>onType('s'));
+$('f_courseId').addEventListener('input',()=>onType('c'));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modal').hidden)closeDel()});
+$('mno').onclick=closeDel;$('mdel').onclick=doDelete;
+$('save').onclick=save;$('reset').onclick=clearForm;
+$('q').oninput=()=>{clearTimeout(timer);timer=setTimeout(search,250)};
+refresh();
 </script>
-
-
 </body>
-
 </html>
